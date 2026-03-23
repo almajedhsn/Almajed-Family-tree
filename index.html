@@ -16,38 +16,28 @@
     }
 
     .topbar {
-      height: 74px;
       background: #ffffff;
       border-bottom: 1px solid #d1d5db;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      padding: 0 16px;
+      padding: 14px 12px 12px;
       box-sizing: border-box;
     }
 
-    .topbar-left {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .topbar-center {
-      text-align: center;
-    }
-
     .title {
+      width: 100%;
+      text-align: center;
       font-size: 34px;
       font-weight: bold;
       color: #111827;
-      line-height: 1;
-      white-space: nowrap;
+      line-height: 1.2;
+      margin: 0 0 12px 0;
     }
 
-    .topbar-right {
+    .actions {
       display: flex;
-      justify-content: flex-end;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
     }
 
     .btn {
@@ -61,8 +51,10 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      white-space: nowrap;
     }
 
     .btn:hover {
@@ -79,11 +71,12 @@
 
     .viewer {
       width: 100%;
-      height: calc(100vh - 74px);
+      height: calc(100vh - var(--topbar-height, 130px));
       position: relative;
       overflow: hidden;
       background: #d1d5db;
       cursor: grab;
+      touch-action: none;
     }
 
     .viewer.dragging {
@@ -105,12 +98,13 @@
       max-width: none;
       width: auto;
       height: auto;
+      image-rendering: auto;
     }
 
     .zoom-panel {
       position: absolute;
-      left: 16px;
-      bottom: 16px;
+      left: 12px;
+      bottom: 12px;
       display: flex;
       gap: 8px;
       background: rgba(255,255,255,0.95);
@@ -138,8 +132,8 @@
 
     .hint {
       position: absolute;
-      right: 16px;
-      bottom: 16px;
+      right: 12px;
+      bottom: 12px;
       background: rgba(17,24,39,0.9);
       color: white;
       padding: 10px 14px;
@@ -148,60 +142,54 @@
       z-index: 20;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 768px) {
       .topbar {
-        height: auto;
-        grid-template-columns: 1fr;
-        gap: 10px;
-        padding: 12px;
-      }
-
-      .topbar-left,
-      .topbar-right,
-      .topbar-center {
-        justify-content: center;
-        text-align: center;
-      }
-
-      .topbar-left {
-        flex-wrap: wrap;
+        padding: 12px 10px 10px;
       }
 
       .title {
         font-size: 26px;
+        margin-bottom: 10px;
       }
 
-      .viewer {
-        height: calc(100vh - 140px);
+      .actions {
+        gap: 8px;
+      }
+
+      .btn {
+        font-size: 13px;
+        padding: 9px 12px;
       }
 
       .hint {
         display: none;
+      }
+
+      .zoom-btn {
+        width: 40px;
+        height: 40px;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="topbar">
-    <div class="topbar-left">
-      <button class="btn btn-secondary" id="fitBtn" type="button">ملء العرض</button>
-      <button class="btn btn-secondary" id="resetBtn" type="button">إعادة الضبط</button>
+  <div class="topbar" id="topbar">
+    <div class="title">شجرة عائلة الماجد</div>
+
+    <div class="actions">
       <a class="btn" href="https://script.google.com/macros/s/AKfycbxpQrOuRrBiNSO8PrVv63WRxfNyGXg09IytRGl6kr2UJYmWrE7HQOoekhreCENt5KHr/exec" target="_blank">
         ➕ إضافة فرد أو صورة
       </a>
-    </div>
 
-    <div class="topbar-center">
-      <div class="title">شجرة عائلة الماجد</div>
+      <button class="btn btn-secondary" id="fitBtn" type="button">ملء العرض</button>
+      <button class="btn btn-secondary" id="resetBtn" type="button">إعادة الضبط</button>
     </div>
-
-    <div class="topbar-right"></div>
   </div>
 
   <div class="viewer" id="viewer">
     <div class="canvas" id="canvas">
-      <img id="treeImage" src="tree.png" alt="شجرة عائلة الماجد">
+      <img id="treeImage" src="./tree.png" alt="شجرة عائلة الماجد">
     </div>
 
     <div class="zoom-panel">
@@ -210,7 +198,7 @@
     </div>
 
     <div class="hint">
-      اسحب بالماوس للتحريك • استخدم + و − للتكبير
+      اسحب للتحريك • استخدم + و − للتكبير
     </div>
   </div>
 
@@ -218,6 +206,7 @@
     const viewer = document.getElementById("viewer");
     const canvas = document.getElementById("canvas");
     const img = document.getElementById("treeImage");
+    const topbar = document.getElementById("topbar");
 
     const zoomInBtn = document.getElementById("zoomInBtn");
     const zoomOutBtn = document.getElementById("zoomOutBtn");
@@ -225,8 +214,8 @@
     const fitBtn = document.getElementById("fitBtn");
 
     let scale = 1;
-    let minScale = 0.05;
-    let maxScale = 8;
+    let minScale = 0.02;
+    let maxScale = 12;
     let translateX = 0;
     let translateY = 0;
 
@@ -234,8 +223,35 @@
     let startX = 0;
     let startY = 0;
 
+    let lastTouchDistance = null;
+
+    function setViewerHeight() {
+      const topbarHeight = topbar.offsetHeight;
+      document.documentElement.style.setProperty("--topbar-height", `${topbarHeight}px`);
+    }
+
     function updateTransform() {
       canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    function fitWholeImage() {
+      const viewerRect = viewer.getBoundingClientRect();
+      if (!img.naturalWidth || !img.naturalHeight) return;
+
+      const scaleX = viewerRect.width / img.naturalWidth;
+      const scaleY = viewerRect.height / img.naturalHeight;
+
+      scale = Math.min(scaleX, scaleY);
+      minScale = Math.max(scale * 0.8, 0.02);
+      maxScale = Math.max(scale * 20, 12);
+
+      const scaledWidth = img.naturalWidth * scale;
+      const scaledHeight = img.naturalHeight * scale;
+
+      translateX = (viewerRect.width - scaledWidth) / 2;
+      translateY = (viewerRect.height - scaledHeight) / 2;
+
+      updateTransform();
     }
 
     function fitToWidth() {
@@ -243,8 +259,8 @@
       if (!img.naturalWidth || !img.naturalHeight) return;
 
       scale = viewerRect.width / img.naturalWidth;
-      minScale = Math.max(scale * 0.4, 0.02);
-      maxScale = Math.max(scale * 20, 8);
+      minScale = Math.max(scale * 0.5, 0.02);
+      maxScale = Math.max(scale * 20, 12);
 
       const scaledHeight = img.naturalHeight * scale;
       translateX = 0;
@@ -253,59 +269,43 @@
       updateTransform();
     }
 
-    function startZoomedView() {
-      const viewerRect = viewer.getBoundingClientRect();
-      if (!img.naturalWidth || !img.naturalHeight) return;
-
-      const fitScale = viewerRect.width / img.naturalWidth;
-
-      /* هنا نجعلها تبدأ أكبر من ملء العرض */
-      scale = fitScale * 4.5;
-
-      minScale = Math.max(fitScale * 0.4, 0.02);
-      maxScale = Math.max(fitScale * 20, 8);
-
-      const scaledWidth = img.naturalWidth * scale;
-      const scaledHeight = img.naturalHeight * scale;
-
-      translateX = (viewerRect.width - scaledWidth) / 2;
-      translateY = 20;
-
-      updateTransform();
-    }
-
     function resetView() {
-      startZoomedView();
+      fitWholeImage();
     }
 
     function zoomAtPoint(factor, clientX, clientY) {
       const rect = viewer.getBoundingClientRect();
-      const mouseX = clientX - rect.left;
-      const mouseY = clientY - rect.top;
+      const pointX = clientX - rect.left;
+      const pointY = clientY - rect.top;
 
       const oldScale = scale;
       const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
-
       if (newScale === oldScale) return;
 
-      const worldX = (mouseX - translateX) / oldScale;
-      const worldY = (mouseY - translateY) / oldScale;
+      const worldX = (pointX - translateX) / oldScale;
+      const worldY = (pointY - translateY) / oldScale;
 
       scale = newScale;
-      translateX = mouseX - worldX * scale;
-      translateY = mouseY - worldY * scale;
+      translateX = pointX - worldX * scale;
+      translateY = pointY - worldY * scale;
 
       updateTransform();
     }
 
+    function getTouchDistance(t1, t2) {
+      const dx = t2.clientX - t1.clientX;
+      const dy = t2.clientY - t1.clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
     zoomInBtn.addEventListener("click", () => {
       const rect = viewer.getBoundingClientRect();
-      zoomAtPoint(1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
+      zoomAtPoint(1.25, rect.left + rect.width / 2, rect.top + rect.height / 2);
     });
 
     zoomOutBtn.addEventListener("click", () => {
       const rect = viewer.getBoundingClientRect();
-      zoomAtPoint(1 / 1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
+      zoomAtPoint(1 / 1.25, rect.left + rect.width / 2, rect.top + rect.height / 2);
     });
 
     resetBtn.addEventListener("click", resetView);
@@ -336,17 +336,60 @@
       zoomAtPoint(factor, e.clientX, e.clientY);
     }, { passive: false });
 
+    viewer.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        const touch = e.touches[0];
+        startX = touch.clientX - translateX;
+        startY = touch.clientY - translateY;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        lastTouchDistance = getTouchDistance(e.touches[0], e.touches[1]);
+      }
+    }, { passive: false });
+
+    viewer.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+
+      if (e.touches.length === 1 && isDragging) {
+        const touch = e.touches[0];
+        translateX = touch.clientX - startX;
+        translateY = touch.clientY - startY;
+        updateTransform();
+      } else if (e.touches.length === 2) {
+        const newDistance = getTouchDistance(e.touches[0], e.touches[1]);
+        if (lastTouchDistance) {
+          const factor = newDistance / lastTouchDistance;
+          const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+          const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+          zoomAtPoint(factor, midX, midY);
+        }
+        lastTouchDistance = newDistance;
+      }
+    }, { passive: false });
+
+    viewer.addEventListener("touchend", () => {
+      isDragging = false;
+      lastTouchDistance = null;
+    });
+
     img.addEventListener("dragstart", (e) => e.preventDefault());
 
     img.onload = function () {
-      startZoomedView();
+      setViewerHeight();
+      fitWholeImage();
     };
 
     img.onerror = function () {
-      alert("لم يتم العثور على الصورة tree.png داخل نفس مجلد index.html");
+      alert("لم يتم العثور على الصورة tree.png");
     };
 
-    window.addEventListener("resize", startZoomedView);
+    window.addEventListener("resize", () => {
+      setViewerHeight();
+      fitWholeImage();
+    });
+
+    setViewerHeight();
   </script>
 
 </body>
