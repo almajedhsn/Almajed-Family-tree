@@ -6,382 +6,306 @@
 <title>شجرة عائلة الماجد</title>
 
 <style>
-
 html,body{
-margin:0;
-width:100%;
-height:100%;
-overflow:hidden;
-font-family:Arial;
-background:#e5e7eb;
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,sans-serif;
+  background:#e5e7eb;
 }
 
 .topbar{
-background:white;
-border-bottom:1px solid #d1d5db;
-padding:14px 12px;
+  background:#ffffff;
+  border-bottom:1px solid #d1d5db;
+  padding:14px 12px;
+  box-sizing:border-box;
 }
 
 .title{
-width:100%;
-text-align:center;
-font-size:34px;
-font-weight:bold;
-color:#111827;
-margin-bottom:12px;
+  width:100%;
+  text-align:center;
+  font-size:34px;
+  font-weight:bold;
+  color:#111827;
+  margin-bottom:12px;
 }
 
 .actions{
-display:flex;
-justify-content:center;
-gap:10px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 .btn{
-border:none;
-background:#2563eb;
-color:white;
-padding:10px 16px;
-border-radius:10px;
-font-size:14px;
-cursor:pointer;
-text-decoration:none;
-display:flex;
-align-items:center;
-gap:6px;
+  border:none;
+  background:#2563eb;
+  color:white;
+  padding:10px 16px;
+  border-radius:10px;
+  font-size:14px;
+  cursor:pointer;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
 
 .btn:hover{
-background:#1d4ed8;
+  background:#1d4ed8;
 }
 
 .viewer{
-width:100%;
-height:calc(100vh - var(--topbar-height,130px));
-position:relative;
-overflow:hidden;
-background:#d1d5db;
-cursor:grab;
-touch-action:none;
+  width:100%;
+  height:calc(100vh - var(--topbar-height,130px));
+  position:relative;
+  overflow:hidden;
+  background:#d1d5db;
+  cursor:grab;
+  touch-action:none;
 }
 
 .viewer.dragging{
-cursor:grabbing;
+  cursor:grabbing;
 }
 
 .canvas{
-position:absolute;
-top:0;
-left:0;
-transform-origin:top left;
+  position:absolute;
+  top:0;
+  left:0;
+  transform-origin:top left;
 }
 
 .canvas img{
-display:block;
-user-select:none;
-max-width:none;
+  display:block;
+  user-select:none;
+  -webkit-user-drag:none;
+  max-width:none;
+  image-rendering:auto;
 }
 
 .zoom-panel{
-position:absolute;
-left:12px;
-bottom:12px;
-display:flex;
-gap:8px;
-background:white;
-border-radius:10px;
-padding:8px;
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  display:flex;
+  gap:8px;
+  background:white;
+  border-radius:10px;
+  padding:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 
 .zoom-btn{
-width:40px;
-height:40px;
-border:none;
-border-radius:8px;
-background:#111827;
-color:white;
-font-size:20px;
-cursor:pointer;
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:8px;
+  background:#111827;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
 }
 
 .zoom-btn:hover{
-background:black;
+  background:black;
 }
 
 @media(max-width:768px){
+  .title{
+    font-size:26px;
+  }
 
-.title{
-font-size:26px;
+  .btn{
+    font-size:13px;
+    padding:8px 12px;
+  }
 }
-
-.btn{
-font-size:13px;
-padding:8px 12px;
-}
-
-}
-
 </style>
 </head>
 
 <body>
 
 <div class="topbar" id="topbar">
+  <div class="title">شجرة عائلة الماجد</div>
 
-<div class="title">
-شجرة عائلة الماجد
-</div>
-
-<div class="actions">
-
-<a class="btn"
-href="https://script.google.com/macros/s/AKfycbxpQrOuRrBiNSO8PrVv63WRxfNyGXg09IytRGl6kr2UJYmWrE7HQOoekhreCENt5KHr/exec"
-target="_blank">
-
-➕ إضافة فرد أو صورة
-
-</a>
-
-</div>
-
+  <div class="actions">
+    <a class="btn"
+       href="https://script.google.com/macros/s/AKfycbxpQrOuRrBiNSO8PrVv63WRxfNyGXg09IytRGl6kr2UJYmWrE7HQOoekhreCENt5KHr/exec"
+       target="_blank">
+       ➕ إضافة فرد أو صورة
+    </a>
+  </div>
 </div>
 
 <div class="viewer" id="viewer">
+  <div class="canvas" id="canvas">
+    <img id="treeImage" src="./tree.png" alt="شجرة عائلة الماجد">
+  </div>
 
-<div class="canvas" id="canvas">
-
-<img id="treeImage" src="./tree.png" alt="شجرة عائلة الماجد">
-
-</div>
-
-<div class="zoom-panel">
-
-<button class="zoom-btn" id="zoomOutBtn">−</button>
-<button class="zoom-btn" id="zoomInBtn">+</button>
-
-</div>
-
+  <div class="zoom-panel">
+    <button class="zoom-btn" id="zoomOutBtn">−</button>
+    <button class="zoom-btn" id="zoomInBtn">+</button>
+  </div>
 </div>
 
 <script>
+const viewer = document.getElementById("viewer");
+const canvas = document.getElementById("canvas");
+const img = document.getElementById("treeImage");
+const topbar = document.getElementById("topbar");
 
-const viewer=document.getElementById("viewer");
-const canvas=document.getElementById("canvas");
-const img=document.getElementById("treeImage");
-const topbar=document.getElementById("topbar");
+const zoomInBtn = document.getElementById("zoomInBtn");
+const zoomOutBtn = document.getElementById("zoomOutBtn");
 
-const zoomInBtn=document.getElementById("zoomInBtn");
-const zoomOutBtn=document.getElementById("zoomOutBtn");
+let scale = 1;
+let translateX = 0;
+let translateY = 0;
 
-let scale=1;
-let translateX=0;
-let translateY=0;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
 
-let isDragging=false;
-let startX=0;
-let startY=0;
-
-let lastTouchDistance=null;
+let lastTouchDistance = null;
 
 function setViewerHeight(){
-
-const topbarHeight=topbar.offsetHeight;
-
-document.documentElement
-.style.setProperty("--topbar-height",topbarHeight+"px");
-
+  const topbarHeight = topbar.offsetHeight;
+  document.documentElement.style.setProperty("--topbar-height", topbarHeight + "px");
 }
 
 function updateTransform(){
-
-canvas.style.transform=
-`translate(${translateX}px,${translateY}px) scale(${scale})`;
-
+  canvas.style.transform = `translate(${translateX}px,${translateY}px) scale(${scale})`;
 }
 
-function startCloserView(){
+function fitWholeImage(){
+  const rect = viewer.getBoundingClientRect();
 
-const rect=viewer.getBoundingClientRect();
+  if(!img.naturalWidth || !img.naturalHeight) return;
 
-const baseScale=Math.min(
-rect.width/img.naturalWidth,
-rect.height/img.naturalHeight
-);
+  const scaleX = rect.width / img.naturalWidth;
+  const scaleY = rect.height / img.naturalHeight;
 
-const isMobile=window.innerWidth<=768;
+  scale = Math.min(scaleX, scaleY);
 
-scale=isMobile?baseScale*2.4:baseScale*3.5;
+  const width = img.naturalWidth * scale;
+  const height = img.naturalHeight * scale;
 
-const width=img.naturalWidth*scale;
-const height=img.naturalHeight*scale;
+  translateX = (rect.width - width) / 2;
+  translateY = (rect.height - height) / 2;
 
-translateX=(rect.width-width)/2;
-translateY=(rect.height-height)/2;
-
-updateTransform();
-
+  updateTransform();
 }
 
-function zoomAtPoint(factor,x,y){
+function zoomAtPoint(factor, x, y){
+  const rect = viewer.getBoundingClientRect();
 
-const rect=viewer.getBoundingClientRect();
+  const px = x - rect.left;
+  const py = y - rect.top;
 
-const px=x-rect.left;
-const py=y-rect.top;
+  const worldX = (px - translateX) / scale;
+  const worldY = (py - translateY) / scale;
 
-const worldX=(px-translateX)/scale;
-const worldY=(py-translateY)/scale;
+  scale *= factor;
 
-scale*=factor;
+  translateX = px - worldX * scale;
+  translateY = py - worldY * scale;
 
-translateX=px-worldX*scale;
-translateY=py-worldY*scale;
-
-updateTransform();
-
+  updateTransform();
 }
 
-zoomInBtn.onclick=()=>{
-
-const rect=viewer.getBoundingClientRect();
-
-zoomAtPoint(1.2,
-rect.left+rect.width/2,
-rect.top+rect.height/2);
-
+zoomInBtn.onclick = () => {
+  const rect = viewer.getBoundingClientRect();
+  zoomAtPoint(1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
 };
 
-zoomOutBtn.onclick=()=>{
-
-const rect=viewer.getBoundingClientRect();
-
-zoomAtPoint(1/1.2,
-rect.left+rect.width/2,
-rect.top+rect.height/2);
-
+zoomOutBtn.onclick = () => {
+  const rect = viewer.getBoundingClientRect();
+  zoomAtPoint(1/1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
 };
 
-viewer.addEventListener("mousedown",(e)=>{
-
-isDragging=true;
-
-startX=e.clientX-translateX;
-startY=e.clientY-translateY;
-
-viewer.classList.add("dragging");
-
+viewer.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  startX = e.clientX - translateX;
+  startY = e.clientY - translateY;
+  viewer.classList.add("dragging");
 });
 
-window.addEventListener("mousemove",(e)=>{
-
-if(!isDragging)return;
-
-translateX=e.clientX-startX;
-translateY=e.clientY-startY;
-
-updateTransform();
-
+window.addEventListener("mousemove", (e) => {
+  if(!isDragging) return;
+  translateX = e.clientX - startX;
+  translateY = e.clientY - startY;
+  updateTransform();
 });
 
-window.addEventListener("mouseup",()=>{
-
-isDragging=false;
-viewer.classList.remove("dragging");
-
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+  viewer.classList.remove("dragging");
 });
 
-viewer.addEventListener("wheel",(e)=>{
+viewer.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.1 : 1/1.1;
+  zoomAtPoint(factor, e.clientX, e.clientY);
+}, { passive:false });
 
-e.preventDefault();
+viewer.addEventListener("touchstart", (e) => {
+  if(e.touches.length === 1){
+    isDragging = true;
+    const t = e.touches[0];
+    startX = t.clientX - translateX;
+    startY = t.clientY - translateY;
+  }
 
-const factor=e.deltaY<0?1.1:1/1.1;
+  if(e.touches.length === 2){
+    lastTouchDistance = Math.hypot(
+      e.touches[1].clientX - e.touches[0].clientX,
+      e.touches[1].clientY - e.touches[0].clientY
+    );
+  }
+}, { passive:false });
 
-zoomAtPoint(factor,e.clientX,e.clientY);
+viewer.addEventListener("touchmove", (e) => {
+  e.preventDefault();
 
-},{passive:false});
+  if(e.touches.length === 1 && isDragging){
+    const t = e.touches[0];
+    translateX = t.clientX - startX;
+    translateY = t.clientY - startY;
+    updateTransform();
+  }
 
-viewer.addEventListener("touchstart",(e)=>{
+  if(e.touches.length === 2){
+    const dist = Math.hypot(
+      e.touches[1].clientX - e.touches[0].clientX,
+      e.touches[1].clientY - e.touches[0].clientY
+    );
 
-if(e.touches.length===1){
+    if(lastTouchDistance){
+      const factor = dist / lastTouchDistance;
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      zoomAtPoint(factor, midX, midY);
+    }
 
-isDragging=true;
+    lastTouchDistance = dist;
+  }
+}, { passive:false });
 
-const t=e.touches[0];
-
-startX=t.clientX-translateX;
-startY=t.clientY-translateY;
-
-}
-
-if(e.touches.length===2){
-
-lastTouchDistance=Math.hypot(
-e.touches[1].clientX-e.touches[0].clientX,
-e.touches[1].clientY-e.touches[0].clientY);
-
-}
-
-},{passive:false});
-
-viewer.addEventListener("touchmove",(e)=>{
-
-e.preventDefault();
-
-if(e.touches.length===1 && isDragging){
-
-const t=e.touches[0];
-
-translateX=t.clientX-startX;
-translateY=t.clientY-startY;
-
-updateTransform();
-
-}
-
-if(e.touches.length===2){
-
-const dist=Math.hypot(
-e.touches[1].clientX-e.touches[0].clientX,
-e.touches[1].clientY-e.touches[0].clientY);
-
-if(lastTouchDistance){
-
-const factor=dist/lastTouchDistance;
-
-const midX=(e.touches[0].clientX+e.touches[1].clientX)/2;
-const midY=(e.touches[0].clientY+e.touches[1].clientY)/2;
-
-zoomAtPoint(factor,midX,midY);
-
-}
-
-lastTouchDistance=dist;
-
-}
-
-},{passive:false});
-
-viewer.addEventListener("touchend",()=>{
-
-isDragging=false;
-lastTouchDistance=null;
-
+viewer.addEventListener("touchend", () => {
+  isDragging = false;
+  lastTouchDistance = null;
 });
 
-img.onload=()=>{
-
-setViewerHeight();
-startCloserView();
-
+img.onload = () => {
+  setViewerHeight();
+  fitWholeImage();
 };
 
-window.addEventListener("resize",()=>{
-
-setViewerHeight();
-startCloserView();
-
+window.addEventListener("resize", () => {
+  setViewerHeight();
+  fitWholeImage();
 });
-
 </script>
 
 </body>
