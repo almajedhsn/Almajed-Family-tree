@@ -1,419 +1,388 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>شجرة عائلة الماجد</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شجرة عائلة الماجد</title>
 
-  <style>
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      background: #e5e7eb;
-    }
+<style>
 
-    .topbar {
-      background: #ffffff;
-      border-bottom: 1px solid #d1d5db;
-      padding: 14px 12px 12px;
-      box-sizing: border-box;
-    }
+html,body{
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Arial;
+background:#e5e7eb;
+}
 
-    .title {
-      width: 100%;
-      text-align: center;
-      font-size: 34px;
-      font-weight: bold;
-      color: #111827;
-      line-height: 1.2;
-      margin: 0 0 12px 0;
-    }
+.topbar{
+background:white;
+border-bottom:1px solid #d1d5db;
+padding:14px 12px;
+}
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-    }
+.title{
+width:100%;
+text-align:center;
+font-size:34px;
+font-weight:bold;
+color:#111827;
+margin-bottom:12px;
+}
 
-    .btn {
-      border: none;
-      background: #2563eb;
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      white-space: nowrap;
-    }
+.actions{
+display:flex;
+justify-content:center;
+gap:10px;
+}
 
-    .btn:hover {
-      background: #1d4ed8;
-    }
+.btn{
+border:none;
+background:#2563eb;
+color:white;
+padding:10px 16px;
+border-radius:10px;
+font-size:14px;
+cursor:pointer;
+text-decoration:none;
+display:flex;
+align-items:center;
+gap:6px;
+}
 
-    .btn-secondary {
-      background: #374151;
-    }
+.btn:hover{
+background:#1d4ed8;
+}
 
-    .btn-secondary:hover {
-      background: #1f2937;
-    }
+.viewer{
+width:100%;
+height:calc(100vh - var(--topbar-height,130px));
+position:relative;
+overflow:hidden;
+background:#d1d5db;
+cursor:grab;
+touch-action:none;
+}
 
-    .viewer {
-      width: 100%;
-      height: calc(100vh - var(--topbar-height, 130px));
-      position: relative;
-      overflow: hidden;
-      background: #d1d5db;
-      cursor: grab;
-      touch-action: none;
-    }
+.viewer.dragging{
+cursor:grabbing;
+}
 
-    .viewer.dragging {
-      cursor: grabbing;
-    }
+.canvas{
+position:absolute;
+top:0;
+left:0;
+transform-origin:top left;
+}
 
-    .canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform-origin: top left;
-      will-change: transform;
-    }
+.canvas img{
+display:block;
+user-select:none;
+max-width:none;
+}
 
-    .canvas img {
-      display: block;
-      user-select: none;
-      -webkit-user-drag: none;
-      max-width: none;
-      width: auto;
-      height: auto;
-      image-rendering: auto;
-    }
+.zoom-panel{
+position:absolute;
+left:12px;
+bottom:12px;
+display:flex;
+gap:8px;
+background:white;
+border-radius:10px;
+padding:8px;
+}
 
-    .zoom-panel {
-      position: absolute;
-      left: 12px;
-      bottom: 12px;
-      display: flex;
-      gap: 8px;
-      background: rgba(255,255,255,0.95);
-      border: 1px solid #d1d5db;
-      border-radius: 12px;
-      padding: 8px;
-      z-index: 20;
-      direction: ltr;
-    }
+.zoom-btn{
+width:40px;
+height:40px;
+border:none;
+border-radius:8px;
+background:#111827;
+color:white;
+font-size:20px;
+cursor:pointer;
+}
 
-    .zoom-btn {
-      width: 42px;
-      height: 42px;
-      border: none;
-      border-radius: 10px;
-      background: #111827;
-      color: white;
-      font-size: 22px;
-      cursor: pointer;
-    }
+.zoom-btn:hover{
+background:black;
+}
 
-    .zoom-btn:hover {
-      background: #000;
-    }
+@media(max-width:768px){
 
-    .hint {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      background: rgba(17,24,39,0.9);
-      color: white;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      z-index: 20;
-    }
+.title{
+font-size:26px;
+}
 
-    @media (max-width: 768px) {
-      .topbar {
-        padding: 12px 10px 10px;
-      }
+.btn{
+font-size:13px;
+padding:8px 12px;
+}
 
-      .title {
-        font-size: 26px;
-        margin-bottom: 10px;
-      }
+}
 
-      .actions {
-        gap: 8px;
-      }
-
-      .btn {
-        font-size: 13px;
-        padding: 9px 12px;
-      }
-
-      .hint {
-        display: none;
-      }
-
-      .zoom-btn {
-        width: 40px;
-        height: 40px;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
-  <div class="topbar" id="topbar">
-    <div class="title">شجرة عائلة الماجد</div>
+<div class="topbar" id="topbar">
 
-    <div class="actions">
-      <a class="btn" href="https://script.google.com/macros/s/AKfycbxpQrOuRrBiNSO8PrVv63WRxfNyGXg09IytRGl6kr2UJYmWrE7HQOoekhreCENt5KHr/exec" target="_blank">
-        ➕ إضافة فرد أو صورة
-      </a>
+<div class="title">
+شجرة عائلة الماجد
+</div>
 
-      <button class="btn btn-secondary" id="fitBtn" type="button">ملء العرض</button>
-      <button class="btn btn-secondary" id="resetBtn" type="button">إعادة الضبط</button>
-    </div>
-  </div>
+<div class="actions">
 
-  <div class="viewer" id="viewer">
-    <div class="canvas" id="canvas">
-      <img id="treeImage" src="./tree.png" alt="شجرة عائلة الماجد">
-    </div>
+<a class="btn"
+href="https://script.google.com/macros/s/AKfycbxpQrOuRrBiNSO8PrVv63WRxfNyGXg09IytRGl6kr2UJYmWrE7HQOoekhreCENt5KHr/exec"
+target="_blank">
 
-    <div class="zoom-panel">
-      <button class="zoom-btn" id="zoomOutBtn" type="button">−</button>
-      <button class="zoom-btn" id="zoomInBtn" type="button">+</button>
-    </div>
+➕ إضافة فرد أو صورة
 
-    <div class="hint">
-      اسحب للتحريك • استخدم + و − للتكبير
-    </div>
-  </div>
+</a>
 
-  <script>
-    const viewer = document.getElementById("viewer");
-    const canvas = document.getElementById("canvas");
-    const img = document.getElementById("treeImage");
-    const topbar = document.getElementById("topbar");
+</div>
 
-    const zoomInBtn = document.getElementById("zoomInBtn");
-    const zoomOutBtn = document.getElementById("zoomOutBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const fitBtn = document.getElementById("fitBtn");
+</div>
 
-    let scale = 1;
-    let minScale = 0.02;
-    let maxScale = 12;
-    let translateX = 0;
-    let translateY = 0;
+<div class="viewer" id="viewer">
 
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
+<div class="canvas" id="canvas">
 
-    let lastTouchDistance = null;
+<img id="treeImage" src="./tree.png" alt="شجرة عائلة الماجد">
 
-    function setViewerHeight() {
-      const topbarHeight = topbar.offsetHeight;
-      document.documentElement.style.setProperty("--topbar-height", `${topbarHeight}px`);
-    }
+</div>
 
-    function updateTransform() {
-      canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-    }
+<div class="zoom-panel">
 
-    function fitWholeImage() {
-      const viewerRect = viewer.getBoundingClientRect();
-      if (!img.naturalWidth || !img.naturalHeight) return;
+<button class="zoom-btn" id="zoomOutBtn">−</button>
+<button class="zoom-btn" id="zoomInBtn">+</button>
 
-      const scaleX = viewerRect.width / img.naturalWidth;
-      const scaleY = viewerRect.height / img.naturalHeight;
+</div>
 
-      scale = Math.min(scaleX, scaleY);
-      minScale = Math.max(scale * 0.8, 0.02);
-      maxScale = Math.max(scale * 20, 12);
+</div>
 
-      const scaledWidth = img.naturalWidth * scale;
-      const scaledHeight = img.naturalHeight * scale;
+<script>
 
-      translateX = (viewerRect.width - scaledWidth) / 2;
-      translateY = (viewerRect.height - scaledHeight) / 2;
+const viewer=document.getElementById("viewer");
+const canvas=document.getElementById("canvas");
+const img=document.getElementById("treeImage");
+const topbar=document.getElementById("topbar");
 
-      updateTransform();
-    }
+const zoomInBtn=document.getElementById("zoomInBtn");
+const zoomOutBtn=document.getElementById("zoomOutBtn");
 
-    function fitToWidth() {
-      const viewerRect = viewer.getBoundingClientRect();
-      if (!img.naturalWidth || !img.naturalHeight) return;
+let scale=1;
+let translateX=0;
+let translateY=0;
 
-      scale = viewerRect.width / img.naturalWidth;
-      minScale = Math.max(scale * 0.5, 0.02);
-      maxScale = Math.max(scale * 20, 12);
+let isDragging=false;
+let startX=0;
+let startY=0;
 
-      const scaledHeight = img.naturalHeight * scale;
-      translateX = 0;
-      translateY = Math.max((viewerRect.height - scaledHeight) / 2, 0);
+let lastTouchDistance=null;
 
-      updateTransform();
-    }
+function setViewerHeight(){
 
-    function startCloserView() {
-      const viewerRect = viewer.getBoundingClientRect();
-      if (!img.naturalWidth || !img.naturalHeight) return;
+const topbarHeight=topbar.offsetHeight;
 
-      const scaleX = viewerRect.width / img.naturalWidth;
-      const scaleY = viewerRect.height / img.naturalHeight;
-      const baseScale = Math.min(scaleX, scaleY);
+document.documentElement
+.style.setProperty("--topbar-height",topbarHeight+"px");
 
-      const isMobile = window.innerWidth <= 768;
-      scale = isMobile ? baseScale * 2.4 : baseScale * 3.5;
+}
 
-      minScale = Math.max(baseScale * 0.8, 0.02);
-      maxScale = Math.max(baseScale * 20, 12);
+function updateTransform(){
 
-      const scaledWidth = img.naturalWidth * scale;
-      const scaledHeight = img.naturalHeight * scale;
+canvas.style.transform=
+`translate(${translateX}px,${translateY}px) scale(${scale})`;
 
-      translateX = (viewerRect.width - scaledWidth) / 2;
-      translateY = Math.max((viewerRect.height - scaledHeight) / 2, 0);
+}
 
-      updateTransform();
-    }
+function startCloserView(){
 
-    function resetView() {
-      startCloserView();
-    }
+const rect=viewer.getBoundingClientRect();
 
-    function zoomAtPoint(factor, clientX, clientY) {
-      const rect = viewer.getBoundingClientRect();
-      const pointX = clientX - rect.left;
-      const pointY = clientY - rect.top;
+const baseScale=Math.min(
+rect.width/img.naturalWidth,
+rect.height/img.naturalHeight
+);
 
-      const oldScale = scale;
-      const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
-      if (newScale === oldScale) return;
+const isMobile=window.innerWidth<=768;
 
-      const worldX = (pointX - translateX) / oldScale;
-      const worldY = (pointY - translateY) / oldScale;
+scale=isMobile?baseScale*2.4:baseScale*3.5;
 
-      scale = newScale;
-      translateX = pointX - worldX * scale;
-      translateY = pointY - worldY * scale;
+const width=img.naturalWidth*scale;
+const height=img.naturalHeight*scale;
 
-      updateTransform();
-    }
+translateX=(rect.width-width)/2;
+translateY=(rect.height-height)/2;
 
-    function getTouchDistance(t1, t2) {
-      const dx = t2.clientX - t1.clientX;
-      const dy = t2.clientY - t1.clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
+updateTransform();
 
-    zoomInBtn.addEventListener("click", () => {
-      const rect = viewer.getBoundingClientRect();
-      zoomAtPoint(1.25, rect.left + rect.width / 2, rect.top + rect.height / 2);
-    });
+}
 
-    zoomOutBtn.addEventListener("click", () => {
-      const rect = viewer.getBoundingClientRect();
-      zoomAtPoint(1 / 1.25, rect.left + rect.width / 2, rect.top + rect.height / 2);
-    });
+function zoomAtPoint(factor,x,y){
 
-    resetBtn.addEventListener("click", resetView);
-    fitBtn.addEventListener("click", fitToWidth);
+const rect=viewer.getBoundingClientRect();
 
-    viewer.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      viewer.classList.add("dragging");
-      startX = e.clientX - translateX;
-      startY = e.clientY - translateY;
-    });
+const px=x-rect.left;
+const py=y-rect.top;
 
-    window.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
-      translateX = e.clientX - startX;
-      translateY = e.clientY - startY;
-      updateTransform();
-    });
+const worldX=(px-translateX)/scale;
+const worldY=(py-translateY)/scale;
 
-    window.addEventListener("mouseup", () => {
-      isDragging = false;
-      viewer.classList.remove("dragging");
-    });
+scale*=factor;
 
-    viewer.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
-      zoomAtPoint(factor, e.clientX, e.clientY);
-    }, { passive: false });
+translateX=px-worldX*scale;
+translateY=py-worldY*scale;
 
-    viewer.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        const touch = e.touches[0];
-        startX = touch.clientX - translateX;
-        startY = touch.clientY - translateY;
-      } else if (e.touches.length === 2) {
-        isDragging = false;
-        lastTouchDistance = getTouchDistance(e.touches[0], e.touches[1]);
-      }
-    }, { passive: false });
+updateTransform();
 
-    viewer.addEventListener("touchmove", (e) => {
-      e.preventDefault();
+}
 
-      if (e.touches.length === 1 && isDragging) {
-        const touch = e.touches[0];
-        translateX = touch.clientX - startX;
-        translateY = touch.clientY - startY;
-        updateTransform();
-      } else if (e.touches.length === 2) {
-        const newDistance = getTouchDistance(e.touches[0], e.touches[1]);
-        if (lastTouchDistance) {
-          const factor = newDistance / lastTouchDistance;
-          const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-          const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-          zoomAtPoint(factor, midX, midY);
-        }
-        lastTouchDistance = newDistance;
-      }
-    }, { passive: false });
+zoomInBtn.onclick=()=>{
 
-    viewer.addEventListener("touchend", () => {
-      isDragging = false;
-      lastTouchDistance = null;
-    });
+const rect=viewer.getBoundingClientRect();
 
-    img.addEventListener("dragstart", (e) => e.preventDefault());
+zoomAtPoint(1.2,
+rect.left+rect.width/2,
+rect.top+rect.height/2);
 
-    img.onload = function () {
-      setViewerHeight();
-      startCloserView();
-    };
+};
 
-    img.onerror = function () {
-      alert("لم يتم العثور على الصورة tree.png");
-    };
+zoomOutBtn.onclick=()=>{
 
-    window.addEventListener("resize", () => {
-      setViewerHeight();
-      startCloserView();
-    });
+const rect=viewer.getBoundingClientRect();
 
-    setViewerHeight();
-  </script>
+zoomAtPoint(1/1.2,
+rect.left+rect.width/2,
+rect.top+rect.height/2);
+
+};
+
+viewer.addEventListener("mousedown",(e)=>{
+
+isDragging=true;
+
+startX=e.clientX-translateX;
+startY=e.clientY-translateY;
+
+viewer.classList.add("dragging");
+
+});
+
+window.addEventListener("mousemove",(e)=>{
+
+if(!isDragging)return;
+
+translateX=e.clientX-startX;
+translateY=e.clientY-startY;
+
+updateTransform();
+
+});
+
+window.addEventListener("mouseup",()=>{
+
+isDragging=false;
+viewer.classList.remove("dragging");
+
+});
+
+viewer.addEventListener("wheel",(e)=>{
+
+e.preventDefault();
+
+const factor=e.deltaY<0?1.1:1/1.1;
+
+zoomAtPoint(factor,e.clientX,e.clientY);
+
+},{passive:false});
+
+viewer.addEventListener("touchstart",(e)=>{
+
+if(e.touches.length===1){
+
+isDragging=true;
+
+const t=e.touches[0];
+
+startX=t.clientX-translateX;
+startY=t.clientY-translateY;
+
+}
+
+if(e.touches.length===2){
+
+lastTouchDistance=Math.hypot(
+e.touches[1].clientX-e.touches[0].clientX,
+e.touches[1].clientY-e.touches[0].clientY);
+
+}
+
+},{passive:false});
+
+viewer.addEventListener("touchmove",(e)=>{
+
+e.preventDefault();
+
+if(e.touches.length===1 && isDragging){
+
+const t=e.touches[0];
+
+translateX=t.clientX-startX;
+translateY=t.clientY-startY;
+
+updateTransform();
+
+}
+
+if(e.touches.length===2){
+
+const dist=Math.hypot(
+e.touches[1].clientX-e.touches[0].clientX,
+e.touches[1].clientY-e.touches[0].clientY);
+
+if(lastTouchDistance){
+
+const factor=dist/lastTouchDistance;
+
+const midX=(e.touches[0].clientX+e.touches[1].clientX)/2;
+const midY=(e.touches[0].clientY+e.touches[1].clientY)/2;
+
+zoomAtPoint(factor,midX,midY);
+
+}
+
+lastTouchDistance=dist;
+
+}
+
+},{passive:false});
+
+viewer.addEventListener("touchend",()=>{
+
+isDragging=false;
+lastTouchDistance=null;
+
+});
+
+img.onload=()=>{
+
+setViewerHeight();
+startCloserView();
+
+};
+
+window.addEventListener("resize",()=>{
+
+setViewerHeight();
+startCloserView();
+
+});
+
+</script>
 
 </body>
 </html>
