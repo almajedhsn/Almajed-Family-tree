@@ -269,8 +269,31 @@
       updateTransform();
     }
 
+    function startCloserView() {
+      const viewerRect = viewer.getBoundingClientRect();
+      if (!img.naturalWidth || !img.naturalHeight) return;
+
+      const scaleX = viewerRect.width / img.naturalWidth;
+      const scaleY = viewerRect.height / img.naturalHeight;
+      const baseScale = Math.min(scaleX, scaleY);
+
+      const isMobile = window.innerWidth <= 768;
+      scale = isMobile ? baseScale * 2.4 : baseScale * 3.5;
+
+      minScale = Math.max(baseScale * 0.8, 0.02);
+      maxScale = Math.max(baseScale * 20, 12);
+
+      const scaledWidth = img.naturalWidth * scale;
+      const scaledHeight = img.naturalHeight * scale;
+
+      translateX = (viewerRect.width - scaledWidth) / 2;
+      translateY = Math.max((viewerRect.height - scaledHeight) / 2, 0);
+
+      updateTransform();
+    }
+
     function resetView() {
-      fitWholeImage();
+      startCloserView();
     }
 
     function zoomAtPoint(factor, clientX, clientY) {
@@ -377,7 +400,7 @@
 
     img.onload = function () {
       setViewerHeight();
-      fitWholeImage();
+      startCloserView();
     };
 
     img.onerror = function () {
@@ -386,7 +409,7 @@
 
     window.addEventListener("resize", () => {
       setViewerHeight();
-      fitWholeImage();
+      startCloserView();
     });
 
     setViewerHeight();
