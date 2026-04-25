@@ -7,54 +7,46 @@
 
 <style>
 :root{
+  --bg:#f7f5f2;
+  --card:#ffffffcc;
   --green:#063f2a;
   --green2:#0b5a3d;
   --gold:#c9a24a;
-  --bg:#f7f5f2;
   --red:#dc2626;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
   width:100%;
   height:100%;
-  overflow:hidden;
   font-family:Tahoma,Arial,sans-serif;
   background:var(--bg);
+  overflow:hidden;
 }
 
 .page{
   height:100vh;
   display:flex;
   flex-direction:column;
-  background:var(--bg);
+  padding:10px;
+  gap:12px;
 }
 
 /* ===== Desktop Header ===== */
 .header{
-  margin:8px 8px 12px;
-  padding:14px 18px;
-  background:rgba(255,255,255,0.72);
+  position:relative;
+  height:135px;
+  background:var(--card);
   border:1px solid rgba(201,162,74,.55);
   border-radius:18px;
   box-shadow:0 8px 24px rgba(0,0,0,.08);
 }
 
-.header-inner{
-  position:relative;
-  min-height:100px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
 .logo-box{
   position:absolute;
-  right:20px;
+  right:26px;
   top:50%;
   transform:translateY(-50%);
 }
@@ -62,21 +54,21 @@ html,body{
 .logo-box img{
   height:115px;
   object-fit:contain;
-  user-select:none;
-  -webkit-user-drag:none;
-  filter:drop-shadow(0 3px 8px rgba(0,0,0,.18));
 }
 
 .center-box{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
   text-align:center;
 }
 
 .title{
   margin:0;
-  font-size:34px;
-  color:var(--green);
+  font-size:36px;
   font-weight:900;
-  line-height:1.2;
+  color:var(--green);
 }
 
 .gold-line{
@@ -88,22 +80,20 @@ html,body{
 }
 
 .add-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+  display:inline-block;
   background:linear-gradient(135deg,var(--green),var(--green2));
-  color:#fff;
-  padding:11px 26px;
+  color:white;
+  padding:12px 28px;
   border-radius:12px;
   text-decoration:none;
   font-weight:900;
-  font-size:15px;
-  box-shadow:0 4px 12px rgba(6,63,42,.28);
+  font-size:16px;
+  box-shadow:0 5px 14px rgba(6,63,42,.28);
 }
 
 .profile-card{
   position:absolute;
-  left:18px;
+  left:22px;
   top:50%;
   transform:translateY(-50%);
   display:flex;
@@ -113,19 +103,17 @@ html,body{
 }
 
 .profile-card img{
-  width:78px;
-  height:78px;
+  width:82px;
+  height:82px;
   border-radius:14px;
   object-fit:cover;
   border:2px solid rgba(201,162,74,.55);
-  user-select:none;
-  -webkit-user-drag:none;
 }
 
 .profile-text{
   text-align:right;
   font-weight:800;
-  line-height:1.7;
+  line-height:1.8;
   white-space:nowrap;
 }
 
@@ -133,66 +121,55 @@ html,body{
   color:var(--green);
 }
 
-/* ===== Mobile Header ===== */
-.mobile-header{
-  display:none;
-}
-
 /* ===== Notice ===== */
 .notice-card{
-  margin:0 8px 12px;
-  background:rgba(255,255,255,0.72);
-  border:1px solid rgba(0,0,0,.06);
+  background:var(--card);
   border-radius:16px;
-  padding:12px;
+  padding:16px 10px;
   text-align:center;
   box-shadow:0 4px 14px rgba(0,0,0,.05);
 }
 
 .notice-main{
+  font-size:18px;
   font-weight:900;
   color:var(--green);
-  font-size:18px;
 }
 
 .notice-wait{
   display:block;
-  margin-top:6px;
+  margin-top:8px;
+  font-size:17px;
   font-weight:900;
   color:var(--red);
-  font-size:16px;
 }
 
 /* ===== Viewer ===== */
 .viewer-wrap{
   flex:1;
   min-height:0;
-  padding:0 8px 8px;
 }
 
 .viewer{
+  position:relative;
   width:100%;
   height:100%;
-  position:relative;
   overflow:hidden;
   background:#d1d5db;
   border-radius:18px;
-  border:1px solid rgba(0,0,0,.14);
+  border:1px solid rgba(0,0,0,.15);
   box-shadow:0 8px 24px rgba(0,0,0,.12);
   cursor:grab;
   touch-action:none;
 }
 
-.viewer.dragging{
-  cursor:grabbing;
-}
+.viewer.dragging{cursor:grabbing}
 
 .canvas{
   position:absolute;
   top:0;
   left:0;
   transform-origin:top left;
-  z-index:2;
 }
 
 .canvas img{
@@ -201,7 +178,6 @@ html,body{
   user-select:none;
   pointer-events:none;
   -webkit-user-drag:none;
-  -webkit-touch-callout:none;
 }
 
 .loading-box{
@@ -209,39 +185,23 @@ html,body{
   inset:0;
   z-index:5;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
-  background:rgba(255,255,255,.82);
+  background:rgba(255,255,255,.8);
   color:var(--green);
   font-weight:900;
-  text-align:center;
-}
-
-.spinner{
-  width:42px;
-  height:42px;
-  border:4px solid #ddd;
-  border-top-color:var(--green);
-  border-radius:50%;
-  margin-bottom:12px;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg);}
 }
 
 .zoom-panel{
   position:absolute;
-  left:16px;
-  bottom:16px;
+  left:18px;
+  bottom:18px;
   z-index:20;
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:10px;
   direction:ltr;
-  background:#fff;
+  background:white;
   padding:8px;
   border-radius:14px;
   box-shadow:0 5px 16px rgba(0,0,0,.20);
@@ -253,20 +213,22 @@ html,body{
   border:none;
   border-radius:10px;
   background:var(--green);
-  color:#fff;
+  color:white;
   font-size:22px;
   font-weight:900;
   cursor:pointer;
 }
 
 .zoom-percent{
-  min-width:60px;
+  min-width:58px;
   text-align:center;
-  color:var(--green);
   font-weight:900;
+  color:var(--green);
 }
 
 /* ===== Mobile ===== */
+.mobile-header{display:none}
+
 @media(max-width:900px){
 
   html,body{
@@ -276,6 +238,8 @@ html,body{
   .page{
     height:auto;
     min-height:100vh;
+    padding:0;
+    gap:0;
   }
 
   .header{
@@ -284,35 +248,25 @@ html,body{
 
   .mobile-header{
     display:block;
+    padding:28px 18px 24px;
     background:var(--bg);
-    padding:24px 18px 18px;
-    border-bottom:3px solid rgba(201,162,74,.75);
-  }
-
-  .mobile-logo{
     text-align:center;
-    margin-bottom:18px;
   }
 
   .mobile-logo img{
-    height:135px;
+    height:125px;
     object-fit:contain;
-    user-select:none;
-    -webkit-user-drag:none;
-    filter:drop-shadow(0 3px 8px rgba(0,0,0,.18));
+    margin-bottom:18px;
   }
 
   .mobile-title{
-    text-align:center;
-    font-size:31px;
+    margin:0 0 18px;
+    font-size:32px;
     font-weight:900;
     color:#111;
-    margin:0 0 18px;
-    line-height:1.4;
   }
 
   .mobile-add{
-    text-align:center;
     margin-bottom:22px;
   }
 
@@ -323,91 +277,33 @@ html,body{
   }
 
   .mobile-profile{
-    max-width:640px;
-    margin:0 auto;
-    background:rgba(255,255,255,0.82);
+    background:var(--card);
     border-radius:26px;
-    padding:18px 22px;
+    padding:18px;
     display:flex;
-    gap:16px;
     align-items:center;
     justify-content:center;
+    gap:16px;
     box-shadow:0 6px 18px rgba(0,0,0,.10);
   }
 
   .mobile-profile img{
-    width:105px;
-    height:105px;
+    width:100px;
+    height:100px;
     border-radius:18px;
     object-fit:cover;
   }
 
   .mobile-profile-text{
-    font-size:23px;
+    font-size:21px;
     font-weight:800;
     line-height:1.6;
-    text-align:center;
   }
 
   .notice-card{
-    margin:16px 20px 12px;
+    margin:14px 18px;
+    padding:18px 10px;
     border-radius:18px;
-    padding:18px 12px;
-    background:rgba(255,255,255,0.82);
-  }
-
-  .notice-main{
-    font-size:23px;
-    color:#111;
-  }
-
-  .notice-wait{
-    font-size:23px;
-    margin-top:14px;
-  }
-
-  .viewer-wrap{
-    height:calc(100vh - 520px);
-    min-height:420px;
-    padding:0 10px 10px;
-  }
-
-  .viewer{
-    border-radius:15px;
-  }
-
-  .zoom-panel{
-    left:10px;
-    bottom:10px;
-  }
-}
-
-@media(max-width:480px){
-
-  .mobile-logo img{
-    height:120px;
-  }
-
-  .mobile-title{
-    font-size:27px;
-  }
-
-  .mobile-add .add-btn{
-    font-size:20px;
-    padding:16px 28px;
-  }
-
-  .mobile-profile{
-    padding:15px;
-  }
-
-  .mobile-profile img{
-    width:90px;
-    height:90px;
-  }
-
-  .mobile-profile-text{
-    font-size:20px;
   }
 
   .notice-main,
@@ -416,8 +312,17 @@ html,body{
   }
 
   .viewer-wrap{
-    height:calc(100vh - 490px);
-    min-height:390px;
+    height:430px;
+    padding:0 10px 12px;
+  }
+
+  .viewer{
+    border-radius:16px;
+  }
+
+  .zoom-panel{
+    left:14px;
+    bottom:14px;
   }
 }
 </style>
@@ -427,40 +332,35 @@ html,body{
 
 <div class="page">
 
-  <!-- Desktop Header -->
+  <!-- Desktop -->
   <header class="header">
-    <div class="header-inner">
+    <div class="logo-box">
+      <img src="logo.png" alt="ALMAJED FAMILY">
+    </div>
 
-      <div class="logo-box">
-        <img src="logo.png" alt="ALMAJED FAMILY" draggable="false">
+    <div class="center-box">
+      <h1 class="title">شجرة عائلة الماجد</h1>
+      <div class="gold-line"></div>
+      <a class="add-btn"
+         href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec"
+         target="_blank">
+        + إضافة فرد أو صورة
+      </a>
+    </div>
+
+    <div class="profile-card">
+      <img src="profile.png" alt="حسن علي أحمد الماجد">
+      <div class="profile-text">
+        <div>إعداد: حسن علي أحمد الماجد</div>
+        <div class="profile-phone">رقم التواصل: 0563399984</div>
       </div>
-
-      <div class="center-box">
-        <h1 class="title">شجرة عائلة الماجد</h1>
-        <div class="gold-line"></div>
-        <a class="add-btn"
-           href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec"
-           target="_blank"
-           rel="noopener noreferrer">
-          + إضافة فرد أو صورة
-        </a>
-      </div>
-
-      <div class="profile-card">
-        <img src="profile.png" alt="حسن علي أحمد الماجد" draggable="false">
-        <div class="profile-text">
-          <div>إعداد: حسن علي أحمد الماجد</div>
-          <div class="profile-phone">رقم التواصل: 0563399984</div>
-        </div>
-      </div>
-
     </div>
   </header>
 
-  <!-- Mobile Header -->
+  <!-- Mobile -->
   <section class="mobile-header">
     <div class="mobile-logo">
-      <img src="logo.png" alt="ALMAJED FAMILY" draggable="false">
+      <img src="logo.png" alt="ALMAJED FAMILY">
     </div>
 
     <h1 class="mobile-title">شجرة عائلة الماجد</h1>
@@ -468,8 +368,7 @@ html,body{
     <div class="mobile-add">
       <a class="add-btn"
          href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec"
-         target="_blank"
-         rel="noopener noreferrer">
+         target="_blank">
         + إضافة فرد أو صورة
       </a>
     </div>
@@ -479,39 +378,28 @@ html,body{
         <div>إعداد: حسن علي أحمد الماجد</div>
         <div>رقم التواصل: 0563399984</div>
       </div>
-      <img src="profile.png" alt="حسن علي أحمد الماجد" draggable="false">
+      <img src="profile.png" alt="حسن علي أحمد الماجد">
     </div>
   </section>
 
-  <!-- Notices -->
   <div class="notice-card">
     <div class="notice-main">🔍 الرجاء تكبير الصورة لرؤية شجرة العائلة</div>
     <span class="notice-wait">⏱ الرجاء الانتظار قليلًا لظهور شجرة العائلة</span>
   </div>
 
-  <!-- Viewer -->
   <main class="viewer-wrap">
     <div class="viewer" id="viewer">
 
-      <div class="loading-box" id="loadingBox">
-        <div class="spinner"></div>
-        <div id="loadingText">جاري تحميل شجرة العائلة...</div>
-      </div>
+      <div class="loading-box" id="loadingBox">جاري تحميل شجرة العائلة...</div>
 
       <div class="canvas" id="canvas">
-        <img
-          id="treeImage"
-          src="tree.png"
-          alt="شجرة عائلة الماجد"
-          decoding="async"
-          fetchpriority="high"
-          draggable="false">
+        <img id="treeImage" src="tree.png" alt="شجرة عائلة الماجد">
       </div>
 
       <div class="zoom-panel">
-        <button class="zoom-btn" id="zoomOutBtn" type="button">−</button>
+        <button class="zoom-btn" id="zoomOutBtn">−</button>
         <div class="zoom-percent" id="zoomPercent">100%</div>
-        <button class="zoom-btn" id="zoomInBtn" type="button">+</button>
+        <button class="zoom-btn" id="zoomInBtn">+</button>
       </div>
 
     </div>
@@ -524,7 +412,6 @@ const viewer = document.getElementById("viewer");
 const canvas = document.getElementById("canvas");
 const img = document.getElementById("treeImage");
 const loadingBox = document.getElementById("loadingBox");
-const loadingText = document.getElementById("loadingText");
 const zoomPercent = document.getElementById("zoomPercent");
 
 let scale = 1;
@@ -542,10 +429,7 @@ function updateTransform(){
 
 function fitImage(){
   const rect = viewer.getBoundingClientRect();
-
-  if(!img.naturalWidth || !img.naturalHeight){
-    return;
-  }
+  if(!img.naturalWidth || !img.naturalHeight) return;
 
   const scaleX = rect.width / img.naturalWidth;
   const scaleY = rect.height / img.naturalHeight;
@@ -563,7 +447,6 @@ function fitImage(){
 
 function zoomAtPoint(factor, clientX, clientY){
   const rect = viewer.getBoundingClientRect();
-
   const px = clientX - rect.left;
   const py = clientY - rect.top;
 
@@ -571,7 +454,6 @@ function zoomAtPoint(factor, clientX, clientY){
   const worldY = (py - translateY) / scale;
 
   scale *= factor;
-
   if(scale < 0.03) scale = 0.03;
   if(scale > 12) scale = 12;
 
@@ -594,7 +476,7 @@ document.getElementById("zoomOutBtn").onclick = () => {
 viewer.addEventListener("wheel", e => {
   e.preventDefault();
   zoomAtPoint(e.deltaY < 0 ? 1.1 : 1 / 1.1, e.clientX, e.clientY);
-}, {passive:false});
+},{passive:false});
 
 viewer.addEventListener("mousedown", e => {
   isDragging = true;
@@ -629,7 +511,7 @@ viewer.addEventListener("touchstart", e => {
       e.touches[1].clientY - e.touches[0].clientY
     );
   }
-}, {passive:false});
+},{passive:false});
 
 viewer.addEventListener("touchmove", e => {
   e.preventDefault();
@@ -656,7 +538,7 @@ viewer.addEventListener("touchmove", e => {
 
     lastTouchDistance = distance;
   }
-}, {passive:false});
+},{passive:false});
 
 viewer.addEventListener("touchend", () => {
   isDragging = false;
@@ -669,25 +551,13 @@ img.onload = () => {
 };
 
 img.onerror = () => {
-  loadingText.innerHTML = "تعذر تحميل صورة شجرة العائلة<br>تأكد أن اسم الملف هو tree.png وأنه في نفس مجلد الصفحة";
+  loadingBox.innerHTML = "تعذر تحميل صورة شجرة العائلة<br>تأكد أن اسم الملف tree.png";
 };
 
 window.addEventListener("resize", fitImage);
 
-/* منع الحفظ المباشر للصورة */
 document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("dragstart", e => e.preventDefault());
-document.addEventListener("keydown", e => {
-  const key = e.key.toLowerCase();
-  if(
-    (e.ctrlKey && key === "s") ||
-    (e.ctrlKey && key === "p") ||
-    (e.ctrlKey && key === "u") ||
-    key === "f12"
-  ){
-    e.preventDefault();
-  }
-});
 </script>
 
 </body>
