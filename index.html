@@ -1,511 +1,306 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>شجرة عائلة الماجد</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>شجرة عائلة الماجد</title>
 
-  <style>
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      background: #e5e7eb;
-    }
+<style>
+html, body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,sans-serif;
+  background:#e5e7eb;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .topbar {
-      background: #ffffff;
-      border-bottom: 1px solid #d1d5db;
-      padding: 8px 10px 4px;
-      position: relative;
-      z-index: 20;
-    }
+.topbar{
+  background:#ffffff;
+  border-bottom:1px solid #d1d5db;
+  padding:8px 10px 4px;
+  position:relative;
+  z-index:20;
+}
 
-    .topbar-inner {
-      position: relative;
-      min-height: 74px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
+.topbar-inner{
+  position:relative;
+  min-height:74px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
 
-    /* جهة اليسار */
-    .profile-box {
-      position: absolute;
-      left: 8px;
-      top: 2px;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      direction: ltr; /* حتى تبقى فعلًا يسار الشاشة */
-    }
+/* 👈 الشعار يمين */
+.logo-box{
+  position:absolute;
+  right:8px;
+  top:4px;
+}
 
-    .profile-box img {
-      width: 74px;
-      height: 74px;
-      object-fit: cover;
-      border-radius: 4px;
-      user-select: none;
-      -webkit-user-drag: none;
-      pointer-events: none;
-    }
+.logo-box img{
+  height:70px;
+  object-fit:contain;
+  user-select:none;
+  pointer-events:none;
+}
 
-    .profile-text {
-      direction: rtl;
-      text-align: right;
-      color: #111827;
-      padding-top: 8px;
-      line-height: 1.2;
-    }
+/* 👈 بياناتك يسار */
+.profile-box{
+  position:absolute;
+  left:8px;
+  top:2px;
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  direction:ltr;
+}
 
-    .profile-text .line1 {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      white-space: nowrap;
-    }
+.profile-box img{
+  width:74px;
+  height:74px;
+  object-fit:cover;
+  border-radius:4px;
+  user-select:none;
+  pointer-events:none;
+}
 
-    .profile-text .line2 {
-      font-size: 15px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
+.profile-text{
+  direction:rtl;
+  text-align:right;
+  color:#111827;
+  padding-top:8px;
+  line-height:1.2;
+}
 
-    /* الوسط */
-    .center-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      text-align: center;
-    }
+.profile-text .line1{
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:6px;
+}
 
-    .title {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 800;
-      color: #111827;
-      line-height: 1.2;
-    }
+.profile-text .line2{
+  font-size:15px;
+  font-weight:800;
+}
 
-    .actions {
-      margin-top: 6px;
-    }
+/* 👈 الوسط */
+.center-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
 
-    .btn {
-      border: none;
-      background: #2563eb;
-      color: #ffffff;
-      padding: 8px 14px;
-      border-radius: 7px;
-      font-size: 11px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 700;
-    }
+.title{
+  margin:0;
+  font-size:22px;
+  font-weight:800;
+  color:#111827;
+}
 
-    .btn:hover {
-      background: #1d4ed8;
-    }
+.actions{
+  margin-top:6px;
+}
 
-    .notice {
-      text-align: center;
-      background: #ffffff;
-      color: #111827;
-      font-size: 15px;
-      font-weight: 800;
-      padding: 2px 10px 8px;
-      border-bottom: 1px solid #d1d5db;
-    }
+.btn{
+  border:none;
+  background:#2563eb;
+  color:white;
+  padding:8px 14px;
+  border-radius:7px;
+  font-size:11px;
+  cursor:pointer;
+  text-decoration:none;
+  font-weight:700;
+}
 
-    .viewer {
-      width: 100%;
-      height: calc(100vh - var(--topbar-height, 115px));
-      position: relative;
-      overflow: hidden;
-      background: #cfd4dc;
-      cursor: grab;
-      touch-action: none;
-    }
+.btn:hover{
+  background:#1d4ed8;
+}
 
-    .viewer.dragging {
-      cursor: grabbing;
-    }
+/* 👇 العبارات */
+.notice{
+  text-align:center;
+  background:#ffffff;
+  color:#111827;
+  font-size:15px;
+  font-weight:800;
+  padding:4px 10px 8px;
+  border-bottom:1px solid #d1d5db;
+}
 
-    .canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform-origin: top left;
-      z-index: 1;
-    }
+/* 👇 النص الأحمر */
+.notice-wait{
+  display:block;
+  margin-top:6px;
+  color:#dc2626;
+  font-weight:bold;
+}
 
-    .canvas img {
-      display: block;
-      user-select: none;
-      -webkit-user-drag: none;
-      -webkit-touch-callout: none;
-      max-width: none;
-      image-rendering: auto;
-      pointer-events: none;
-    }
+/* 👇 عرض الشجرة */
+.viewer{
+  width:100%;
+  height:calc(100vh - var(--topbar-height, 115px));
+  position:relative;
+  overflow:hidden;
+  background:#cfd4dc;
+  cursor:grab;
+}
 
-    .protect-layer {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      background: transparent;
-    }
+.viewer.dragging{
+  cursor:grabbing;
+}
 
-    .zoom-panel {
-      position: absolute;
-      left: 6px;
-      bottom: 8px;
-      display: flex;
-      gap: 4px;
-      background: #ffffff;
-      border-radius: 8px;
-      padding: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-      z-index: 30;
-      direction: ltr;
-    }
+.canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  transform-origin:top left;
+}
 
-    .zoom-btn {
-      width: 28px;
-      height: 34px;
-      border: none;
-      border-radius: 6px;
-      background: #0f172a;
-      color: #ffffff;
-      font-size: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      line-height: 1;
-    }
+.canvas img{
+  display:block;
+  user-select:none;
+  pointer-events:none;
+}
 
-    .zoom-btn:hover {
-      background: #020617;
-    }
+/* 👇 حماية الصورة */
+.protect-layer{
+  position:absolute;
+  inset:0;
+}
 
-    @media (max-width: 900px) {
-      .topbar-inner {
-        min-height: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-      }
+/* 👇 أزرار التكبير */
+.zoom-panel{
+  position:absolute;
+  left:6px;
+  bottom:8px;
+  display:flex;
+  gap:4px;
+  background:white;
+  border-radius:8px;
+  padding:4px;
+  z-index:30;
+}
 
-      .profile-box {
-        position: static;
-        align-self: flex-start;
-        width: 100%;
-        margin-bottom: 2px;
-      }
-
-      .center-box {
-        width: 100%;
-      }
-
-      .title {
-        font-size: 20px;
-      }
-
-      .notice {
-        font-size: 14px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .profile-box img {
-        width: 58px;
-        height: 58px;
-      }
-
-      .profile-text {
-        padding-top: 4px;
-      }
-
-      .profile-text .line1 {
-        font-size: 11px;
-      }
-
-      .profile-text .line2 {
-        font-size: 13px;
-      }
-
-      .title {
-        font-size: 18px;
-      }
-
-      .btn {
-        font-size: 10px;
-        padding: 7px 11px;
-      }
-
-      .notice {
-        font-size: 13px;
-      }
-    }
-  </style>
+.zoom-btn{
+  width:28px;
+  height:34px;
+  border:none;
+  border-radius:6px;
+  background:#0f172a;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+  font-weight:bold;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="topbar" id="topbar">
-    <div class="topbar-inner">
+<div class="topbar" id="topbar">
+  <div class="topbar-inner">
 
-      <!-- يسار -->
-      <div class="profile-box">
-        <img src="./profile.png" alt="حسن علي أحمد الماجد" draggable="false">
-        <div class="profile-text">
-          <div class="line1">أعداد: حسن علي أحمد الماجد | ابو كيان</div>
-          <div class="line2">رقم التواصل: 0563399984</div>
-        </div>
+    <!-- 👈 الشعار -->
+    <div class="logo-box">
+      <img src="./logo.png">
+    </div>
+
+    <!-- 👈 بياناتك -->
+    <div class="profile-box">
+      <img src="./profile.png">
+      <div class="profile-text">
+        <div class="line1">أعداد: حسن علي أحمد الماجد</div>
+        <div class="line2">رقم التواصل: 0563399984</div>
       </div>
+    </div>
 
-      <!-- وسط -->
-      <div class="center-box">
-        <h1 class="title">شجرة عائلة الماجد</h1>
+    <!-- 👈 العنوان -->
+    <div class="center-box">
+      <h1 class="title">شجرة عائلة الماجد</h1>
 
-        <div class="actions">
-          <a
-            class="btn"
-            href="https://script.google.com/macros/s/AKfycbxpQrOuRrBiNSO8PrVv63WRxfNyGXg09IytRGl6kr2UJYmWrE7HQOoekhreCENt5KHr/exec"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            + إضافة فرد أو صورة
-          </a>
-        </div>
+      <div class="actions">
+        <a class="btn"
+           href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec"
+           target="_blank">
+           + إضافة فرد أو صورة
+        </a>
       </div>
-
-    </div>
-  </div>
-
-  <div class="notice">
-    الرجاء تكبير الصورة لرؤية شجرة العائلة
-  </div>
-
-  <div class="viewer" id="viewer">
-    <div class="canvas" id="canvas">
-      <img id="treeImage" src="./tree.png" alt="شجرة عائلة الماجد" draggable="false">
     </div>
 
-    <div class="protect-layer" id="protectLayer"></div>
+  </div>
+</div>
 
-    <div class="zoom-panel">
-      <button class="zoom-btn" id="zoomInBtn" type="button">+</button>
-      <button class="zoom-btn" id="zoomOutBtn" type="button">−</button>
-    </div>
+<!-- 👇 العبارات -->
+<div class="notice">
+  الرجاء تكبير الصورة لرؤية شجرة العائلة
+  <span class="notice-wait">الرجاء الانتظار قليل لظهور شجرة العائلة</span>
+</div>
+
+<!-- 👇 الشجرة -->
+<div class="viewer" id="viewer">
+  <div class="canvas" id="canvas">
+    <img id="treeImage" src="./tree.png">
   </div>
 
-  <script>
-    const viewer = document.getElementById("viewer");
-    const canvas = document.getElementById("canvas");
-    const img = document.getElementById("treeImage");
-    const topbar = document.getElementById("topbar");
-    const notice = document.querySelector(".notice");
-    const protectLayer = document.getElementById("protectLayer");
+  <div class="protect-layer"></div>
 
-    const zoomInBtn = document.getElementById("zoomInBtn");
-    const zoomOutBtn = document.getElementById("zoomOutBtn");
+  <div class="zoom-panel">
+    <button class="zoom-btn" id="zoomInBtn">+</button>
+    <button class="zoom-btn" id="zoomOutBtn">−</button>
+  </div>
+</div>
 
-    let scale = 1;
-    let translateX = 0;
-    let translateY = 0;
+<script>
+const viewer = document.getElementById("viewer");
+const canvas = document.getElementById("canvas");
 
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let lastTouchDistance = null;
+let scale = 1;
+let translateX = 0;
+let translateY = 0;
 
-    function setViewerHeight() {
-      const totalTop = topbar.offsetHeight + notice.offsetHeight;
-      document.documentElement.style.setProperty("--topbar-height", totalTop + "px");
-    }
+function update(){
+  canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
 
-    function updateTransform() {
-      canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-    }
+document.getElementById("zoomInBtn").onclick = () => {
+  scale *= 1.2;
+  update();
+};
 
-    function fitWholeImage() {
-      const rect = viewer.getBoundingClientRect();
-      if (!img.naturalWidth || !img.naturalHeight) return;
+document.getElementById("zoomOutBtn").onclick = () => {
+  scale /= 1.2;
+  update();
+};
 
-      const scaleX = rect.width / img.naturalWidth;
-      const scaleY = rect.height / img.naturalHeight;
+viewer.addEventListener("mousedown", e=>{
+  let startX = e.clientX - translateX;
+  let startY = e.clientY - translateY;
 
-      scale = Math.min(scaleX, scaleY);
+  function move(ev){
+    translateX = ev.clientX - startX;
+    translateY = ev.clientY - startY;
+    update();
+  }
 
-      const width = img.naturalWidth * scale;
-      const height = img.naturalHeight * scale;
+  function up(){
+    window.removeEventListener("mousemove", move);
+    window.removeEventListener("mouseup", up);
+  }
 
-      translateX = (rect.width - width) / 2;
-      translateY = (rect.height - height) / 2;
+  window.addEventListener("mousemove", move);
+  window.addEventListener("mouseup", up);
+});
 
-      updateTransform();
-    }
-
-    function zoomAtPoint(factor, x, y) {
-      const rect = viewer.getBoundingClientRect();
-      const px = x - rect.left;
-      const py = y - rect.top;
-
-      const worldX = (px - translateX) / scale;
-      const worldY = (py - translateY) / scale;
-
-      scale *= factor;
-      if (scale < 0.05) scale = 0.05;
-      if (scale > 8) scale = 8;
-
-      translateX = px - worldX * scale;
-      translateY = py - worldY * scale;
-
-      updateTransform();
-    }
-
-    zoomInBtn.onclick = () => {
-      const rect = viewer.getBoundingClientRect();
-      zoomAtPoint(1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
-    };
-
-    zoomOutBtn.onclick = () => {
-      const rect = viewer.getBoundingClientRect();
-      zoomAtPoint(1 / 1.2, rect.left + rect.width / 2, rect.top + rect.height / 2);
-    };
-
-    function startDrag(clientX, clientY) {
-      isDragging = true;
-      startX = clientX - translateX;
-      startY = clientY - translateY;
-      viewer.classList.add("dragging");
-    }
-
-    function dragMove(clientX, clientY) {
-      if (!isDragging) return;
-      translateX = clientX - startX;
-      translateY = clientY - startY;
-      updateTransform();
-    }
-
-    function endDrag() {
-      isDragging = false;
-      viewer.classList.remove("dragging");
-    }
-
-    viewer.addEventListener("mousedown", (e) => {
-      startDrag(e.clientX, e.clientY);
-    });
-
-    window.addEventListener("mousemove", (e) => {
-      dragMove(e.clientX, e.clientY);
-    });
-
-    window.addEventListener("mouseup", () => {
-      endDrag();
-    });
-
-    viewer.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
-      zoomAtPoint(factor, e.clientX, e.clientY);
-    }, { passive: false });
-
-    viewer.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 1) {
-        const t = e.touches[0];
-        startDrag(t.clientX, t.clientY);
-      }
-
-      if (e.touches.length === 2) {
-        lastTouchDistance = Math.hypot(
-          e.touches[1].clientX - e.touches[0].clientX,
-          e.touches[1].clientY - e.touches[0].clientY
-        );
-      }
-    }, { passive: false });
-
-    viewer.addEventListener("touchmove", (e) => {
-      e.preventDefault();
-
-      if (e.touches.length === 1 && isDragging) {
-        const t = e.touches[0];
-        dragMove(t.clientX, t.clientY);
-      }
-
-      if (e.touches.length === 2) {
-        const dist = Math.hypot(
-          e.touches[1].clientX - e.touches[0].clientX,
-          e.touches[1].clientY - e.touches[0].clientY
-        );
-
-        if (lastTouchDistance) {
-          const factor = dist / lastTouchDistance;
-          const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-          const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-          zoomAtPoint(factor, midX, midY);
-        }
-
-        lastTouchDistance = dist;
-      }
-    }, { passive: false });
-
-    viewer.addEventListener("touchend", () => {
-      endDrag();
-      lastTouchDistance = null;
-    });
-
-    /* منع الحفظ المباشر قدر الإمكان */
-    document.addEventListener("contextmenu", (e) => {
-      e.preventDefault();
-    });
-
-    document.addEventListener("dragstart", (e) => {
-      e.preventDefault();
-    });
-
-    document.addEventListener("selectstart", (e) => {
-      if (e.target.tagName === "IMG") e.preventDefault();
-    });
-
-    document.addEventListener("keydown", (e) => {
-      const key = e.key.toLowerCase();
-
-      if (
-        (e.ctrlKey && key === "s") ||
-        (e.ctrlKey && key === "p") ||
-        (e.ctrlKey && key === "u") ||
-        (e.ctrlKey && e.shiftKey && ["i", "j", "c", "s"].includes(key)) ||
-        key === "f12"
-      ) {
-        e.preventDefault();
-      }
-    });
-
-    protectLayer.addEventListener("dblclick", (e) => {
-      e.preventDefault();
-    });
-
-    img.onload = () => {
-      setViewerHeight();
-      fitWholeImage();
-    };
-
-    window.addEventListener("resize", () => {
-      setViewerHeight();
-      fitWholeImage();
-    });
-  </script>
+/* منع حفظ الصورة */
+document.addEventListener("contextmenu", e=>e.preventDefault());
+</script>
 
 </body>
 </html>
