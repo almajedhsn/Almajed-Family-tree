@@ -6,154 +6,98 @@
 <title>شجرة عائلة الماجد</title>
 
 <style>
-html, body{
+:root{
+  --green:#063f2a;
+  --green2:#0b5a3d;
+  --gold:#c9a24a;
+  --bg:#f6f4ef;
+  --card:#ffffff;
+  --text:#14231b;
+  --muted:#647067;
+  --red:#dc2626;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
   margin:0;
   width:100%;
   height:100%;
   overflow:hidden;
-  font-family:Arial,sans-serif;
-  background:#e5e7eb;
+  font-family:Tahoma, Arial, sans-serif;
+  background:var(--bg);
 }
 
-*{
-  box-sizing:border-box;
+/* ===== HEADER ===== */
+.header{
+  background:#fff;
+  border-bottom:3px solid rgba(201,162,74,.45);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  padding:12px 18px;
 }
 
-.topbar{
-  background:#ffffff;
-  border-bottom:1px solid #d1d5db;
-  padding:8px 10px 4px;
-  position:relative;
-  z-index:20;
-}
-
-.topbar-inner{
-  position:relative;
-  min-height:74px;
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-}
-
-/* 👈 الشعار يمين */
-.logo-box{
-  position:absolute;
-  right:8px;
-  top:4px;
-}
-
-.logo-box img{
-  height:70px;
-  object-fit:contain;
-  user-select:none;
-  pointer-events:none;
-}
-
-/* 👈 بياناتك يسار */
-.profile-box{
-  position:absolute;
-  left:8px;
-  top:2px;
-  display:flex;
-  align-items:flex-start;
-  gap:8px;
-  direction:ltr;
-}
-
-.profile-box img{
-  width:74px;
-  height:74px;
-  object-fit:cover;
-  border-radius:4px;
-  user-select:none;
-  pointer-events:none;
-}
-
-.profile-text{
-  direction:rtl;
-  text-align:right;
-  color:#111827;
-  padding-top:8px;
-  line-height:1.2;
-}
-
-.profile-text .line1{
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:6px;
-}
-
-.profile-text .line2{
-  font-size:15px;
-  font-weight:800;
-}
-
-/* 👈 الوسط */
-.center-box{
-  display:flex;
-  flex-direction:column;
+.header-inner{
+  display:grid;
+  grid-template-columns:260px 1fr 260px;
   align-items:center;
-  text-align:center;
 }
+
+.logo-box img{ height:80px; }
+
+.center-box{ text-align:center; }
 
 .title{
   margin:0;
-  font-size:22px;
-  font-weight:800;
-  color:#111827;
+  font-size:30px;
+  font-weight:900;
+  color:var(--green);
 }
 
-.actions{
-  margin-top:6px;
-}
-
-.btn{
-  border:none;
-  background:#2563eb;
-  color:white;
-  padding:8px 14px;
-  border-radius:7px;
-  font-size:11px;
-  cursor:pointer;
+.add-btn{
+  margin-top:10px;
+  display:inline-block;
+  background:var(--green);
+  color:#fff;
+  padding:10px 20px;
+  border-radius:10px;
   text-decoration:none;
-  font-weight:700;
-}
-
-.btn:hover{
-  background:#1d4ed8;
-}
-
-/* 👇 العبارات */
-.notice{
-  text-align:center;
-  background:#ffffff;
-  color:#111827;
-  font-size:15px;
-  font-weight:800;
-  padding:4px 10px 8px;
-  border-bottom:1px solid #d1d5db;
-}
-
-/* 👇 النص الأحمر */
-.notice-wait{
-  display:block;
-  margin-top:6px;
-  color:#dc2626;
   font-weight:bold;
 }
 
-/* 👇 عرض الشجرة */
-.viewer{
-  width:100%;
-  height:calc(100vh - var(--topbar-height, 115px));
-  position:relative;
-  overflow:hidden;
-  background:#cfd4dc;
-  cursor:grab;
+.profile-card{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  justify-content:flex-end;
 }
 
-.viewer.dragging{
-  cursor:grabbing;
+.profile-card img{
+  width:70px;
+  height:70px;
+  border-radius:10px;
+}
+
+/* ===== NOTICE ===== */
+.notice{
+  text-align:center;
+  padding:10px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+}
+
+.notice-wait{
+  display:block;
+  color:red;
+  margin-top:5px;
+  font-weight:bold;
+}
+
+/* ===== VIEWER ===== */
+.viewer{
+  height:calc(100vh - 160px);
+  background:#ccc;
+  position:relative;
+  overflow:hidden;
 }
 
 .canvas{
@@ -164,142 +108,125 @@ html, body{
 }
 
 .canvas img{
-  display:block;
   user-select:none;
   pointer-events:none;
 }
 
-/* 👇 حماية الصورة */
-.protect-layer{
+/* ===== LOADING ===== */
+.loading{
   position:absolute;
   inset:0;
-}
-
-/* 👇 أزرار التكبير */
-.zoom-panel{
-  position:absolute;
-  left:6px;
-  bottom:8px;
   display:flex;
-  gap:4px;
-  background:white;
-  border-radius:8px;
-  padding:4px;
-  z-index:30;
+  align-items:center;
+  justify-content:center;
+  background:#ffffffcc;
+  font-weight:bold;
 }
 
-.zoom-btn{
-  width:28px;
-  height:34px;
-  border:none;
-  border-radius:6px;
-  background:#0f172a;
-  color:white;
-  font-size:20px;
-  cursor:pointer;
-  font-weight:bold;
+/* ===== ZOOM ===== */
+.zoom{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+}
+
+button{
+  padding:6px 10px;
+  font-size:18px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar" id="topbar">
-  <div class="topbar-inner">
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
 
-    <!-- 👈 الشعار -->
     <div class="logo-box">
-      <img src="./logo.png">
+      <img src="logo.png">
     </div>
 
-    <!-- 👈 بياناتك -->
-    <div class="profile-box">
-      <img src="./profile.png">
-      <div class="profile-text">
-        <div class="line1">أعداد: حسن علي أحمد الماجد</div>
-        <div class="line2">رقم التواصل: 0563399984</div>
-      </div>
-    </div>
-
-    <!-- 👈 العنوان -->
     <div class="center-box">
       <h1 class="title">شجرة عائلة الماجد</h1>
+      <a class="add-btn" href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec" target="_blank">
+        + إضافة فرد أو صورة
+      </a>
+    </div>
 
-      <div class="actions">
-        <a class="btn"
-           href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec"
-           target="_blank">
-           + إضافة فرد أو صورة
-        </a>
+    <div class="profile-card">
+      <img src="profile.png">
+      <div>
+        إعداد: حسن علي أحمد الماجد<br>
+        0563399984
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- 👇 العبارات -->
+<!-- NOTICE -->
 <div class="notice">
   الرجاء تكبير الصورة لرؤية شجرة العائلة
   <span class="notice-wait">الرجاء الانتظار قليل لظهور شجرة العائلة</span>
 </div>
 
-<!-- 👇 الشجرة -->
+<!-- VIEWER -->
 <div class="viewer" id="viewer">
+
+  <div class="loading" id="loading">جاري تحميل الشجرة...</div>
+
   <div class="canvas" id="canvas">
-    <img id="treeImage" src="./tree.png">
+    <!-- 👇 هنا التعديل إلى tree.png -->
+    <img id="treeImage" src="tree.png">
   </div>
 
-  <div class="protect-layer"></div>
-
-  <div class="zoom-panel">
-    <button class="zoom-btn" id="zoomInBtn">+</button>
-    <button class="zoom-btn" id="zoomOutBtn">−</button>
+  <div class="zoom">
+    <button onclick="zoomIn()">+</button>
+    <button onclick="zoomOut()">-</button>
   </div>
+
 </div>
 
 <script>
-const viewer = document.getElementById("viewer");
-const canvas = document.getElementById("canvas");
+let scale=1, x=0, y=0;
 
-let scale = 1;
-let translateX = 0;
-let translateY = 0;
+const canvas=document.getElementById("canvas");
+const img=document.getElementById("treeImage");
+const loading=document.getElementById("loading");
 
 function update(){
-  canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  canvas.style.transform=`translate(${x}px,${y}px) scale(${scale})`;
 }
 
-document.getElementById("zoomInBtn").onclick = () => {
-  scale *= 1.2;
-  update();
+function zoomIn(){ scale*=1.2; update(); }
+function zoomOut(){ scale/=1.2; update(); }
+
+img.onload=()=>{
+  loading.style.display="none";
 };
 
-document.getElementById("zoomOutBtn").onclick = () => {
-  scale /= 1.2;
-  update();
-};
-
-viewer.addEventListener("mousedown", e=>{
-  let startX = e.clientX - translateX;
-  let startY = e.clientY - translateY;
+document.getElementById("viewer").addEventListener("mousedown",e=>{
+  let startX=e.clientX-x;
+  let startY=e.clientY-y;
 
   function move(ev){
-    translateX = ev.clientX - startX;
-    translateY = ev.clientY - startY;
+    x=ev.clientX-startX;
+    y=ev.clientY-startY;
     update();
   }
 
   function up(){
-    window.removeEventListener("mousemove", move);
-    window.removeEventListener("mouseup", up);
+    window.removeEventListener("mousemove",move);
+    window.removeEventListener("mouseup",up);
   }
 
-  window.addEventListener("mousemove", move);
-  window.addEventListener("mouseup", up);
+  window.addEventListener("mousemove",move);
+  window.addEventListener("mouseup",up);
 });
 
 /* منع حفظ الصورة */
-document.addEventListener("contextmenu", e=>e.preventDefault());
+document.addEventListener("contextmenu",e=>e.preventDefault());
 </script>
 
 </body>
