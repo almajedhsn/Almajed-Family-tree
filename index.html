@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شجرة عائلة الماجد</title>
 
 <style>
@@ -11,93 +11,158 @@
   --green2:#0b5a3d;
   --gold:#c9a24a;
   --bg:#f6f4ef;
-  --card:#ffffff;
-  --text:#14231b;
-  --muted:#647067;
   --red:#dc2626;
 }
 
-*{ box-sizing:border-box; }
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
   width:100%;
   height:100%;
   overflow:hidden;
-  font-family:Tahoma, Arial, sans-serif;
+  font-family:Tahoma,Arial,sans-serif;
   background:var(--bg);
 }
 
-/* ===== HEADER ===== */
+.page{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Header */
 .header{
+  margin:14px;
+  padding:14px 18px;
   background:#fff;
-  border-bottom:3px solid rgba(201,162,74,.45);
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-  padding:12px 18px;
+  border:1px solid rgba(201,162,74,.55);
+  border-radius:18px;
+  box-shadow:0 8px 24px rgba(0,0,0,.10);
 }
 
 .header-inner{
   display:grid;
-  grid-template-columns:260px 1fr 260px;
+  grid-template-columns:280px 1fr 280px;
   align-items:center;
+  gap:20px;
 }
 
-.logo-box img{ height:80px; }
+.logo-box{
+  display:flex;
+  justify-content:flex-start;
+}
 
-.center-box{ text-align:center; }
+.logo-box img{
+  height:82px;
+  object-fit:contain;
+}
+
+.center-box{
+  text-align:center;
+}
 
 .title{
   margin:0;
-  font-size:30px;
-  font-weight:900;
+  font-size:34px;
   color:var(--green);
+  font-weight:900;
+}
+
+.gold-line{
+  width:95px;
+  height:3px;
+  background:var(--gold);
+  margin:8px auto 12px;
+  border-radius:99px;
 }
 
 .add-btn{
-  margin-top:10px;
-  display:inline-block;
-  background:var(--green);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--green),var(--green2));
   color:#fff;
-  padding:10px 20px;
-  border-radius:10px;
+  padding:11px 26px;
+  border-radius:12px;
   text-decoration:none;
-  font-weight:bold;
+  font-weight:900;
+  box-shadow:0 4px 12px rgba(6,63,42,.28);
 }
 
 .profile-card{
   display:flex;
   align-items:center;
-  gap:10px;
   justify-content:flex-end;
+  gap:12px;
 }
 
 .profile-card img{
-  width:70px;
-  height:70px;
-  border-radius:10px;
+  width:78px;
+  height:78px;
+  border-radius:14px;
+  object-fit:cover;
+  border:2px solid rgba(201,162,74,.55);
 }
 
-/* ===== NOTICE ===== */
-.notice{
-  text-align:center;
-  padding:10px;
+.profile-text{
+  text-align:right;
+  font-weight:800;
+  line-height:1.7;
+  white-space:nowrap;
+}
+
+.profile-phone{
+  color:var(--green);
+}
+
+/* Notice */
+.notice-card{
+  margin:0 14px 12px;
   background:#fff;
-  border-bottom:1px solid #ddd;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:12px;
+  text-align:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+
+.notice-main{
+  font-weight:900;
+  color:var(--green);
+  font-size:18px;
 }
 
 .notice-wait{
   display:block;
-  color:red;
-  margin-top:5px;
-  font-weight:bold;
+  margin-top:6px;
+  font-weight:900;
+  color:var(--red);
+  font-size:16px;
 }
 
-/* ===== VIEWER ===== */
+/* Viewer */
+.viewer-wrap{
+  flex:1;
+  min-height:0;
+  padding:0 14px 14px;
+}
+
 .viewer{
-  height:calc(100vh - 160px);
-  background:#ccc;
+  width:100%;
+  height:100%;
   position:relative;
   overflow:hidden;
+  background:#d1d5db;
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,.14);
+  box-shadow:0 8px 24px rgba(0,0,0,.14);
+  cursor:grab;
+  touch-action:none;
+}
+
+.viewer.dragging{
+  cursor:grabbing;
 }
 
 .canvas{
@@ -105,128 +170,424 @@ html,body{
   top:0;
   left:0;
   transform-origin:top left;
+  z-index:2;
 }
 
 .canvas img{
+  display:block;
+  max-width:none;
   user-select:none;
   pointer-events:none;
+  -webkit-user-drag:none;
 }
 
-/* ===== LOADING ===== */
-.loading{
+.loading-box{
   position:absolute;
   inset:0;
+  z-index:5;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  background:#ffffffcc;
-  font-weight:bold;
+  background:rgba(255,255,255,.82);
+  color:var(--green);
+  font-weight:900;
+  text-align:center;
 }
 
-/* ===== ZOOM ===== */
-.zoom{
+.spinner{
+  width:42px;
+  height:42px;
+  border:4px solid #ddd;
+  border-top-color:var(--green);
+  border-radius:50%;
+  margin-bottom:12px;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.zoom-panel{
   position:absolute;
-  bottom:10px;
-  left:10px;
+  left:16px;
+  bottom:16px;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  direction:ltr;
+  background:#fff;
+  padding:8px;
+  border-radius:14px;
+  box-shadow:0 5px 16px rgba(0,0,0,.20);
 }
 
-button{
-  padding:6px 10px;
-  font-size:18px;
+.zoom-btn{
+  width:42px;
+  height:38px;
+  border:none;
+  border-radius:10px;
+  background:var(--green);
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.zoom-percent{
+  min-width:60px;
+  text-align:center;
+  color:var(--green);
+  font-weight:900;
+}
+
+/* Mobile */
+.mobile-header{
+  display:none;
+}
+
+@media(max-width:900px){
+  html,body{
+    overflow:auto;
+  }
+
+  .page{
+    height:auto;
+    min-height:100vh;
+  }
+
+  .header{
+    display:none;
+  }
+
+  .mobile-header{
+    display:block;
+    background:linear-gradient(135deg,var(--green),#052819);
+    color:white;
+    padding:14px;
+  }
+
+  .mobile-logo{
+    text-align:center;
+  }
+
+  .mobile-logo img{
+    height:54px;
+    object-fit:contain;
+  }
+
+  .mobile-title{
+    text-align:center;
+    font-size:25px;
+    font-weight:900;
+    margin:12px 0;
+  }
+
+  .mobile-add{
+    text-align:center;
+  }
+
+  .mobile-profile{
+    margin:14px auto 0;
+    max-width:430px;
+    background:#fff;
+    color:#111;
+    border-radius:16px;
+    padding:10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.18);
+  }
+
+  .mobile-profile img{
+    width:66px;
+    height:66px;
+    border-radius:13px;
+    object-fit:cover;
+  }
+
+  .mobile-profile-text{
+    font-size:13px;
+    font-weight:800;
+    line-height:1.7;
+  }
+
+  .notice-card{
+    margin:10px;
+    border-radius:14px;
+  }
+
+  .notice-main{
+    font-size:14px;
+  }
+
+  .notice-wait{
+    font-size:13px;
+  }
+
+  .viewer-wrap{
+    height:calc(100vh - 275px);
+    min-height:420px;
+    padding:0 10px 10px;
+  }
+
+  .viewer{
+    border-radius:15px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-inner">
+<div class="page">
 
-    <div class="logo-box">
-      <img src="logo.png">
+  <header class="header">
+    <div class="header-inner">
+
+      <div class="logo-box">
+        <img src="logo.png" alt="ALMAJED FAMILY">
+      </div>
+
+      <div class="center-box">
+        <h1 class="title">شجرة عائلة الماجد</h1>
+        <div class="gold-line"></div>
+        <a class="add-btn"
+           href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec"
+           target="_blank"
+           rel="noopener noreferrer">
+          + إضافة فرد أو صورة
+        </a>
+      </div>
+
+      <div class="profile-card">
+        <img src="profile.png" alt="حسن علي أحمد الماجد">
+        <div class="profile-text">
+          <div>إعداد: حسن علي أحمد الماجد</div>
+          <div class="profile-phone">رقم التواصل: 0563399984</div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <section class="mobile-header">
+    <div class="mobile-logo">
+      <img src="logo.png" alt="ALMAJED FAMILY">
     </div>
 
-    <div class="center-box">
-      <h1 class="title">شجرة عائلة الماجد</h1>
-      <a class="add-btn" href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec" target="_blank">
+    <div class="mobile-title">شجرة عائلة الماجد</div>
+
+    <div class="mobile-add">
+      <a class="add-btn"
+         href="https://script.google.com/macros/s/AKfycbz9L0Vr_g5Lh1u21R2MSzlewGH0V7ZH8Sbd6EByEH1Dc5GBzmSUm-xsIc7obUat5XaC/exec"
+         target="_blank"
+         rel="noopener noreferrer">
         + إضافة فرد أو صورة
       </a>
     </div>
 
-    <div class="profile-card">
-      <img src="profile.png">
-      <div>
-        إعداد: حسن علي أحمد الماجد<br>
-        0563399984
+    <div class="mobile-profile">
+      <img src="profile.png" alt="حسن علي أحمد الماجد">
+      <div class="mobile-profile-text">
+        <div>إعداد: حسن علي أحمد الماجد</div>
+        <div>رقم التواصل: 0563399984</div>
       </div>
     </div>
+  </section>
 
-  </div>
-</div>
-
-<!-- NOTICE -->
-<div class="notice">
-  الرجاء تكبير الصورة لرؤية شجرة العائلة
-  <span class="notice-wait">الرجاء الانتظار قليل لظهور شجرة العائلة</span>
-</div>
-
-<!-- VIEWER -->
-<div class="viewer" id="viewer">
-
-  <div class="loading" id="loading">جاري تحميل الشجرة...</div>
-
-  <div class="canvas" id="canvas">
-    <!-- 👇 هنا التعديل إلى tree.png -->
-    <img id="treeImage" src="tree.png">
+  <div class="notice-card">
+    <div class="notice-main">🔍 الرجاء تكبير الصورة لرؤية شجرة العائلة</div>
+    <span class="notice-wait">⏱ الرجاء الانتظار قليلًا لظهور شجرة العائلة</span>
   </div>
 
-  <div class="zoom">
-    <button onclick="zoomIn()">+</button>
-    <button onclick="zoomOut()">-</button>
-  </div>
+  <main class="viewer-wrap">
+    <div class="viewer" id="viewer">
+
+      <div class="loading-box" id="loadingBox">
+        <div class="spinner"></div>
+        <div id="loadingText">جاري تحميل شجرة العائلة...</div>
+      </div>
+
+      <div class="canvas" id="canvas">
+        <img id="treeImage"
+             src="tree.png"
+             alt="شجرة عائلة الماجد"
+             decoding="async"
+             fetchpriority="high"
+             draggable="false">
+      </div>
+
+      <div class="zoom-panel">
+        <button class="zoom-btn" id="zoomOutBtn" type="button">−</button>
+        <div class="zoom-percent" id="zoomPercent">100%</div>
+        <button class="zoom-btn" id="zoomInBtn" type="button">+</button>
+      </div>
+
+    </div>
+  </main>
 
 </div>
 
 <script>
-let scale=1, x=0, y=0;
+const viewer = document.getElementById("viewer");
+const canvas = document.getElementById("canvas");
+const img = document.getElementById("treeImage");
+const loadingBox = document.getElementById("loadingBox");
+const loadingText = document.getElementById("loadingText");
+const zoomPercent = document.getElementById("zoomPercent");
 
-const canvas=document.getElementById("canvas");
-const img=document.getElementById("treeImage");
-const loading=document.getElementById("loading");
+let scale = 1;
+let translateX = 0;
+let translateY = 0;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let lastTouchDistance = null;
 
-function update(){
-  canvas.style.transform=`translate(${x}px,${y}px) scale(${scale})`;
+function updateTransform(){
+  canvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  zoomPercent.textContent = Math.round(scale * 100) + "%";
 }
 
-function zoomIn(){ scale*=1.2; update(); }
-function zoomOut(){ scale/=1.2; update(); }
+function fitImage(){
+  const rect = viewer.getBoundingClientRect();
 
-img.onload=()=>{
-  loading.style.display="none";
+  if(!img.naturalWidth || !img.naturalHeight){
+    return;
+  }
+
+  const scaleX = rect.width / img.naturalWidth;
+  const scaleY = rect.height / img.naturalHeight;
+
+  scale = Math.min(scaleX, scaleY);
+
+  const imgW = img.naturalWidth * scale;
+  const imgH = img.naturalHeight * scale;
+
+  translateX = (rect.width - imgW) / 2;
+  translateY = (rect.height - imgH) / 2;
+
+  updateTransform();
+}
+
+function zoomAtPoint(factor, clientX, clientY){
+  const rect = viewer.getBoundingClientRect();
+
+  const px = clientX - rect.left;
+  const py = clientY - rect.top;
+
+  const worldX = (px - translateX) / scale;
+  const worldY = (py - translateY) / scale;
+
+  scale *= factor;
+  if(scale < 0.03) scale = 0.03;
+  if(scale > 12) scale = 12;
+
+  translateX = px - worldX * scale;
+  translateY = py - worldY * scale;
+
+  updateTransform();
+}
+
+document.getElementById("zoomInBtn").onclick = () => {
+  const r = viewer.getBoundingClientRect();
+  zoomAtPoint(1.2, r.left + r.width / 2, r.top + r.height / 2);
 };
 
-document.getElementById("viewer").addEventListener("mousedown",e=>{
-  let startX=e.clientX-x;
-  let startY=e.clientY-y;
+document.getElementById("zoomOutBtn").onclick = () => {
+  const r = viewer.getBoundingClientRect();
+  zoomAtPoint(1 / 1.2, r.left + r.width / 2, r.top + r.height / 2);
+};
 
-  function move(ev){
-    x=ev.clientX-startX;
-    y=ev.clientY-startY;
-    update();
-  }
+viewer.addEventListener("wheel", e => {
+  e.preventDefault();
+  zoomAtPoint(e.deltaY < 0 ? 1.1 : 1 / 1.1, e.clientX, e.clientY);
+}, {passive:false});
 
-  function up(){
-    window.removeEventListener("mousemove",move);
-    window.removeEventListener("mouseup",up);
-  }
-
-  window.addEventListener("mousemove",move);
-  window.addEventListener("mouseup",up);
+viewer.addEventListener("mousedown", e => {
+  isDragging = true;
+  startX = e.clientX - translateX;
+  startY = e.clientY - translateY;
+  viewer.classList.add("dragging");
 });
 
-/* منع حفظ الصورة */
-document.addEventListener("contextmenu",e=>e.preventDefault());
+window.addEventListener("mousemove", e => {
+  if(!isDragging) return;
+  translateX = e.clientX - startX;
+  translateY = e.clientY - startY;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+  viewer.classList.remove("dragging");
+});
+
+viewer.addEventListener("touchstart", e => {
+  if(e.touches.length === 1){
+    const t = e.touches[0];
+    isDragging = true;
+    startX = t.clientX - translateX;
+    startY = t.clientY - translateY;
+  }
+
+  if(e.touches.length === 2){
+    lastTouchDistance = Math.hypot(
+      e.touches[1].clientX - e.touches[0].clientX,
+      e.touches[1].clientY - e.touches[0].clientY
+    );
+  }
+}, {passive:false});
+
+viewer.addEventListener("touchmove", e => {
+  e.preventDefault();
+
+  if(e.touches.length === 1 && isDragging){
+    const t = e.touches[0];
+    translateX = t.clientX - startX;
+    translateY = t.clientY - startY;
+    updateTransform();
+  }
+
+  if(e.touches.length === 2){
+    const distance = Math.hypot(
+      e.touches[1].clientX - e.touches[0].clientX,
+      e.touches[1].clientY - e.touches[0].clientY
+    );
+
+    if(lastTouchDistance){
+      const factor = distance / lastTouchDistance;
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      zoomAtPoint(factor, midX, midY);
+    }
+
+    lastTouchDistance = distance;
+  }
+}, {passive:false});
+
+viewer.addEventListener("touchend", () => {
+  isDragging = false;
+  lastTouchDistance = null;
+});
+
+img.onload = () => {
+  loadingBox.style.display = "none";
+  setTimeout(fitImage, 80);
+};
+
+img.onerror = () => {
+  loadingText.innerHTML = "تعذر تحميل صورة شجرة العائلة<br>تأكد أن اسم الملف هو tree.png وأنه في نفس مجلد الصفحة";
+};
+
+window.addEventListener("resize", fitImage);
+
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("dragstart", e => e.preventDefault());
 </script>
 
 </body>
