@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شجرة عائلة الماجد</title>
 
+<!-- 🚀 تحسين سرعة تحميل الصورة -->
+<link rel="preload" as="image" href="tree.webp">
+
 <style>
 :root{
   --bg:#f7f5f2;
@@ -264,7 +267,19 @@ html,body{
     </div>
 
     <div class="canvas" id="canvas">
-      <img id="treeImage" src="tree.png">
+
+      <!-- 🚀 الحل النهائي للصورة -->
+      <picture>
+        <source srcset="tree.webp" type="image/webp">
+        <img
+          id="treeImage"
+          src="tree.png"
+          alt="شجرة عائلة الماجد"
+          decoding="async"
+          fetchpriority="high"
+          draggable="false">
+      </picture>
+
     </div>
 
   </div>
@@ -273,13 +288,6 @@ html,body{
 </div>
 
 <script>
-let scale=1,x=0,y=0;
-
-function update(){
-  document.getElementById("canvas").style.transform=
-  `translate(${x}px,${y}px) scale(${scale})`;
-}
-
 document.getElementById("treeImage").onload=()=>{
   document.getElementById("loading").style.display="none";
 };
