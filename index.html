@@ -7,10 +7,10 @@
 
 <style>
 :root{
-  --green:#c8a97e;   /* بني فاتح */
-  --green2:#b89563;  /* بني أغمق */
+  --bg:#e9e7e3;
+  --brown:#c8a97e;
+  --brown2:#b89563;
   --gold:#c9a24a;
-  --bg:#f6f4ef;
   --red:#dc2626;
 }
 
@@ -18,214 +18,118 @@
 
 html,body{
   margin:0;
-  width:100%;
   height:100%;
-  overflow:hidden;
-  font-family:Tahoma,Arial,sans-serif;
+  font-family:Tahoma,Arial;
   background:var(--bg);
 }
 
-.page{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-}
-
-/* HEADER */
+/* ===== HEADER ===== */
 .header{
-  margin:14px;
-  padding:14px 18px;
+  position:relative;
   background:#fff;
-  border:1px solid rgba(201,162,74,.55);
-  border-radius:18px;
-  box-shadow:0 8px 24px rgba(0,0,0,.10);
+  padding:20px;
+  border-bottom:2px solid var(--gold);
 }
 
-.header-inner{
-  display:grid;
-  grid-template-columns:280px 1fr 280px;
-  align-items:center;
+/* 👇 الشعار (لابتوب) */
+.logo-box{
+  position:absolute;
+  top:10px;
+  right:20px;
 }
 
 .logo-box img{
-  height:100px; /* تم التكبير */
+  height:140px; /* تكبير */
 }
 
-.center-box{
+/* العنوان */
+.title-box{
   text-align:center;
 }
 
 .title{
   margin:0;
-  font-size:34px;
-  color:#2b2b2b;
+  font-size:32px;
   font-weight:900;
-}
-
-.gold-line{
-  width:95px;
-  height:3px;
-  background:var(--gold);
-  margin:8px auto 12px;
 }
 
 .add-btn{
+  margin-top:10px;
   display:inline-block;
-  background:linear-gradient(135deg,var(--green),var(--green2));
+  background:linear-gradient(135deg,var(--brown),var(--brown2));
   color:#fff;
-  padding:12px 26px;
-  border-radius:12px;
+  padding:10px 20px;
+  border-radius:10px;
   text-decoration:none;
-  font-weight:900;
-  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  font-weight:bold;
 }
 
-.profile-card{
+/* البيانات */
+.profile{
+  position:absolute;
+  left:20px;
+  top:20px;
   display:flex;
+  gap:10px;
   align-items:center;
-  gap:12px;
-  justify-content:flex-end;
 }
 
-.profile-card img{
-  width:80px;
-  height:80px;
-  border-radius:14px;
-  object-fit:cover;
-  border:2px solid rgba(201,162,74,.55);
+.profile img{
+  width:70px;
+  height:70px;
+  border-radius:10px;
 }
 
-.profile-text{
-  text-align:right;
-  font-weight:800;
-}
-
-.profile-phone{
-  color:#2b2b2b;
-}
-
-/* NOTICE */
-.notice-card{
-  margin:0 14px 12px;
-  background:#fff;
-  border-radius:16px;
-  padding:12px;
+/* ===== NOTICE ===== */
+.notice{
   text-align:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.06);
-}
-
-.notice-main{
-  font-weight:900;
-  font-size:18px;
-  color:#2b2b2b;
+  padding:10px;
+  background:#fff;
 }
 
 .notice-wait{
   display:block;
-  margin-top:6px;
-  font-weight:900;
   color:var(--red);
+  margin-top:5px;
+  font-weight:bold;
 }
 
-/* VIEWER */
-.viewer-wrap{
-  flex:1;
-  padding:0 14px 14px;
-}
-
+/* ===== VIEWER ===== */
 .viewer{
-  width:100%;
-  height:100%;
-  background:#d1d5db;
-  border-radius:18px;
+  height:calc(100vh - 180px);
+  background:#ccc;
   overflow:hidden;
   position:relative;
 }
 
 .canvas{
   position:absolute;
-  top:0;
-  left:0;
 }
 
-.canvas img{
-  user-select:none;
+canvas img{
   pointer-events:none;
 }
 
-/* LOADING */
-.loading-box{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#ffffffcc;
-  font-weight:bold;
-}
-
-/* ZOOM */
-.zoom-panel{
-  position:absolute;
-  bottom:10px;
-  left:10px;
-  background:#fff;
-  padding:8px;
-  border-radius:12px;
-}
-
-.zoom-btn{
-  font-size:20px;
-  margin:0 4px;
-}
-
-/* MOBILE */
-.mobile-header{
-  display:none;
-}
-
+/* ===== MOBILE ===== */
 @media(max-width:900px){
 
-  html,body{overflow:auto}
-
-  .header{display:none}
-
-  .mobile-header{
-    display:block;
-    background:linear-gradient(135deg,#d2b48c,#b89563);
-    color:white;
-    padding:14px;
-  }
-
-  .mobile-logo img{
-    height:70px; /* تكبير */
-  }
-
-  .mobile-title{
+  .logo-box{
+    position:static;
     text-align:center;
-    font-size:26px;
-    font-weight:900;
   }
 
-  .mobile-add{
-    text-align:center;
+  .logo-box img{
+    height:120px;
+  }
+
+  .profile{
+    position:static;
+    justify-content:center;
     margin-top:10px;
   }
 
-  .mobile-profile{
-    background:#fff;
-    margin-top:10px;
-    padding:10px;
-    border-radius:14px;
-    display:flex;
-    gap:10px;
-    align-items:center;
-  }
-
-  .mobile-profile img{
-    width:60px;
-    height:60px;
-    border-radius:12px;
+  .title{
+    font-size:24px;
   }
 
 }
@@ -234,96 +138,53 @@ html,body{
 
 <body>
 
-<div class="page">
-
-<!-- DESKTOP HEADER -->
 <div class="header">
-  <div class="header-inner">
 
-    <div class="logo-box">
-      <img src="logo.png">
-    </div>
-
-    <div class="center-box">
-      <h1 class="title">شجرة عائلة الماجد</h1>
-      <div class="gold-line"></div>
-      <a class="add-btn" href="YOUR_LINK" target="_blank">
-        + إضافة فرد أو صورة
-      </a>
-    </div>
-
-    <div class="profile-card">
-      <img src="profile.png">
-      <div>
-        إعداد: حسن علي أحمد الماجد<br>
-        0563399984
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MOBILE HEADER -->
-<div class="mobile-header">
-  <div class="mobile-logo">
+  <!-- الشعار -->
+  <div class="logo-box">
     <img src="logo.png">
   </div>
 
-  <div class="mobile-title">شجرة عائلة الماجد</div>
-
-  <div class="mobile-add">
+  <!-- العنوان -->
+  <div class="title-box">
+    <h1 class="title">شجرة عائلة الماجد</h1>
     <a class="add-btn" href="YOUR_LINK" target="_blank">
       + إضافة فرد أو صورة
     </a>
   </div>
 
-  <div class="mobile-profile">
+  <!-- بياناتك -->
+  <div class="profile">
     <img src="profile.png">
     <div>
       إعداد: حسن علي أحمد الماجد<br>
       0563399984
     </div>
   </div>
+
 </div>
 
-<!-- NOTICE -->
-<div class="notice-card">
-  <div class="notice-main">🔍 الرجاء تكبير الصورة لرؤية شجرة العائلة</div>
-  <span class="notice-wait">⏱ الرجاء الانتظار قليلًا لظهور شجرة العائلة</span>
+<div class="notice">
+  الرجاء تكبير الصورة لرؤية شجرة العائلة
+  <span class="notice-wait">الرجاء الانتظار قليل لظهور شجرة العائلة</span>
 </div>
 
-<!-- VIEWER -->
-<div class="viewer-wrap">
-  <div class="viewer">
-
-    <div class="loading-box" id="loading">جاري التحميل...</div>
-
-    <div class="canvas" id="canvas">
-      <img id="treeImage" src="tree.png">
-    </div>
-
-    <div class="zoom-panel">
-      <button class="zoom-btn" onclick="zoomIn()">+</button>
-      <button class="zoom-btn" onclick="zoomOut()">-</button>
-    </div>
-
+<div class="viewer">
+  <div class="canvas" id="canvas">
+    <img id="treeImage" src="tree.png">
   </div>
-</div>
-
 </div>
 
 <script>
 let scale=1,x=0,y=0;
 
 function update(){
-  document.getElementById("canvas").style.transform=`translate(${x}px,${y}px) scale(${scale})`;
+  document.getElementById("canvas").style.transform=
+  `translate(${x}px,${y}px) scale(${scale})`;
 }
 
-function zoomIn(){scale*=1.2;update();}
-function zoomOut(){scale/=1.2;update();}
-
 document.getElementById("treeImage").onload=()=>{
-  document.getElementById("loading").style.display="none";
+  console.log("تم تحميل الصورة");
 };
 </script>
 
